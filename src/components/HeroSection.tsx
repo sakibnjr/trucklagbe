@@ -21,6 +21,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useBooking } from "@/contexts/BookingContext";
+import { Link } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
 
 type VehicleType = 'truck' | 'pickup' | 'pickup-van' | 'private-car' | 'hiace';
@@ -354,15 +355,22 @@ const HeroSection = () => {
               variants={itemVariants}
             >
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="hero" className="group">
+                <Button 
+                  size="lg" 
+                  variant="hero" 
+                  className="group"
+                  onClick={() => bookingFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                >
                   {t("hero.bookNow")}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="hero-outline">
-                  {t("hero.aboutUs")}
-                </Button>
+                <Link to="/about">
+                  <Button size="lg" variant="hero-outline">
+                    {t("hero.aboutUs")}
+                  </Button>
+                </Link>
               </motion.div>
             </motion.div>
 
