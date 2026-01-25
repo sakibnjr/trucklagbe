@@ -78,7 +78,7 @@ const ServiceAreasSection = () => {
               {t("serviceAreas.title")}
             </motion.h2>
             <motion.p 
-              className="text-muted-foreground text-lg mb-8"
+              className="text-foreground/80 text-lg mb-8"
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.4 }}
