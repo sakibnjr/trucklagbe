@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Truck, ArrowRight, Clock, CalendarIcon } from "lucide-react";
+import { MapPin, Calendar, Truck, ArrowRight, Clock, CalendarIcon, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,21 +16,33 @@ import {
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { format } from "date-fns";
-import { bn } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-bg.jpg";
 
+type VehicleType = 'truck' | 'pickup' | 'pickup-van' | 'private-car' | 'hiace';
+
 const HeroSection = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Form state
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [vehicleType, setVehicleType] = useState<VehicleType | "">("");
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [deliveryLocation, setDeliveryLocation] = useState("");
   const [pickupDate, setPickupDate] = useState<Date>();
   const [pickupTime, setPickupTime] = useState<string>("");
+  const [duration, setDuration] = useState<string>("");
 
   const vehicleTypes = [
-    { value: "truck", label: "ট্রাক" },
-    { value: "pickup", label: "পিকআপ" },
-    { value: "pickup-van", label: "পিকআপ ভ্যান" },
-    { value: "private-car", label: "প্রাইভেট কার" },
-    { value: "hiace", label: "হায়েস" },
+    { value: "truck" as VehicleType, label: "ট্রাক" },
+    { value: "pickup" as VehicleType, label: "পিকআপ" },
+    { value: "pickup-van" as VehicleType, label: "পিকআপ ভ্যান" },
+    { value: "private-car" as VehicleType, label: "প্রাইভেট কার" },
+    { value: "hiace" as VehicleType, label: "হায়েস" },
   ];
 
   const timeSlots = [
@@ -97,6 +109,86 @@ const HeroSection = () => {
     const month = months[date.getMonth()];
     const year = date.getFullYear().toLocaleString('bn-BD').replace(/,/g, '');
     return `${day} ${month}, ${year}`;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validation
+    if (!customerName.trim()) {
+      toast({ title: "ত্রুটি", description: "আপনার নাম লিখুন", variant: "destructive" });
+      return;
+    }
+    if (!customerPhone.trim() || customerPhone.length < 11) {
+      toast({ title: "ত্রুটি", description: "সঠিক মোবাইল নম্বর লিখুন", variant: "destructive" });
+      return;
+    }
+    if (!vehicleType) {
+      toast({ title: "ত্রুটি", description: "যানবাহন নির্বাচন করুন", variant: "destructive" });
+      return;
+    }
+    if (!pickupLocation.trim()) {
+      toast({ title: "ত্রুটি", description: "পিকআপ পয়েন্ট লিখুন", variant: "destructive" });
+      return;
+    }
+    if (!deliveryLocation.trim()) {
+      toast({ title: "ত্রুটি", description: "ডেলিভারি পয়েন্ট লিখুন", variant: "destructive" });
+      return;
+    }
+    if (!pickupDate) {
+      toast({ title: "ত্রুটি", description: "তারিখ নির্বাচন করুন", variant: "destructive" });
+      return;
+    }
+    if (!pickupTime) {
+      toast({ title: "ত্রুটি", description: "সময় নির্বাচন করুন", variant: "destructive" });
+      return;
+    }
+    if (!duration) {
+      toast({ title: "ত্রুটি", description: "সময়কাল নির্বাচন করুন", variant: "destructive" });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.from('bookings').insert({
+        customer_name: customerName.trim(),
+        customer_phone: customerPhone.trim(),
+        vehicle_type: vehicleType,
+        pickup_location: pickupLocation.trim(),
+        delivery_location: deliveryLocation.trim(),
+        pickup_date: pickupDate.toISOString().split('T')[0],
+        pickup_time: pickupTime + ':00',
+        duration_days: parseInt(duration),
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "সফল! ✅",
+        description: "আপনার বুকিং সফলভাবে সম্পন্ন হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।",
+      });
+
+      // Reset form
+      setCustomerName("");
+      setCustomerPhone("");
+      setVehicleType("");
+      setPickupLocation("");
+      setDeliveryLocation("");
+      setPickupDate(undefined);
+      setPickupTime("");
+      setDuration("");
+
+    } catch (error) {
+      console.error('Booking error:', error);
+      toast({
+        title: "ত্রুটি",
+        description: "বুকিং করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -245,7 +337,40 @@ const HeroSection = () => {
               এখনই বুকিং করুন
             </motion.h2>
             
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              {/* Customer Name & Phone Row */}
+              <motion.div 
+                className="grid grid-cols-2 gap-3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.85 }}
+              >
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                    <User className="w-4 h-4 text-secondary" />
+                    আপনার নাম
+                  </label>
+                  <Input 
+                    placeholder="নাম লিখুন" 
+                    className="h-12" 
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-secondary" />
+                    মোবাইল নম্বর
+                  </label>
+                  <Input 
+                    placeholder="01XXXXXXXXX" 
+                    className="h-12" 
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                  />
+                </div>
+              </motion.div>
+
               {/* Vehicle Type */}
               <motion.div 
                 className="space-y-2"
@@ -257,7 +382,7 @@ const HeroSection = () => {
                   <Truck className="w-4 h-4 text-secondary" />
                   যানবাহনের ধরন
                 </label>
-                <Select>
+                <Select value={vehicleType} onValueChange={(value: VehicleType) => setVehicleType(value)}>
                   <SelectTrigger className="h-12">
                     <SelectValue placeholder="যানবাহন নির্বাচন করুন" />
                   </SelectTrigger>
@@ -282,7 +407,12 @@ const HeroSection = () => {
                   <MapPin className="w-4 h-4 text-secondary" />
                   পিকআপ পয়েন্ট
                 </label>
-                <Input placeholder="কোথা থেকে তুলবেন?" className="h-12" />
+                <Input 
+                  placeholder="কোথা থেকে তুলবেন?" 
+                  className="h-12" 
+                  value={pickupLocation}
+                  onChange={(e) => setPickupLocation(e.target.value)}
+                />
               </motion.div>
 
               {/* Delivery Location */}
@@ -296,7 +426,12 @@ const HeroSection = () => {
                   <MapPin className="w-4 h-4 text-primary" />
                   ডেলিভারি পয়েন্ট
                 </label>
-                <Input placeholder="কোথায় পৌঁছাবেন?" className="h-12" />
+                <Input 
+                  placeholder="কোথায় পৌঁছাবেন?" 
+                  className="h-12" 
+                  value={deliveryLocation}
+                  onChange={(e) => setDeliveryLocation(e.target.value)}
+                />
               </motion.div>
 
               {/* Date and Time Row */}
@@ -370,7 +505,7 @@ const HeroSection = () => {
                   <Calendar className="w-4 h-4 text-secondary" />
                   কতদিনের জন্য
                 </label>
-                <Select>
+                <Select value={duration} onValueChange={setDuration}>
                   <SelectTrigger className="h-12">
                     <SelectValue placeholder="সময়কাল নির্বাচন করুন" />
                   </SelectTrigger>
@@ -391,9 +526,15 @@ const HeroSection = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button type="submit" variant="secondary" size="lg" className="w-full group">
-                  ভাড়া দেখুন
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <Button 
+                  type="submit" 
+                  variant="secondary" 
+                  size="lg" 
+                  className="w-full group"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "বুকিং হচ্ছে..." : "বুকিং করুন"}
+                  {!isSubmitting && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
                 </Button>
               </motion.div>
             </form>
