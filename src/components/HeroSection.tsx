@@ -15,11 +15,12 @@ import {
 } from "@/components/ui/popover";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useBooking } from "@/contexts/BookingContext";
 import heroBg from "@/assets/hero-bg.jpg";
 
 type VehicleType = 'truck' | 'pickup' | 'pickup-van' | 'private-car' | 'hiace';
@@ -27,7 +28,14 @@ type VehicleType = 'truck' | 'pickup' | 'pickup-van' | 'private-car' | 'hiace';
 const HeroSection = () => {
   const { toast } = useToast();
   const { t, language } = useLanguage();
+  const { selectedVehicle, setBookingFormRef } = useBooking();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const bookingFormRef = useRef<HTMLDivElement>(null);
+  
+  // Register the booking form ref
+  useEffect(() => {
+    setBookingFormRef(bookingFormRef);
+  }, [setBookingFormRef]);
   
   // Form state
   const [customerName, setCustomerName] = useState("");
@@ -38,6 +46,13 @@ const HeroSection = () => {
   const [pickupDate, setPickupDate] = useState<Date>();
   const [pickupTime, setPickupTime] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
+
+  // Update vehicle type when selected from vehicles section
+  useEffect(() => {
+    if (selectedVehicle) {
+      setVehicleType(selectedVehicle);
+    }
+  }, [selectedVehicle]);
 
   const vehicleTypes = language === "bn" 
     ? [
@@ -372,7 +387,8 @@ const HeroSection = () => {
 
           {/* Booking Form */}
           <motion.div 
-            className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated"
+            ref={bookingFormRef}
+            className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated transition-all duration-300"
             initial={{ opacity: 0, x: 50, rotateY: -10 }}
             animate={{ opacity: 1, x: 0, rotateY: 0 }}
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
