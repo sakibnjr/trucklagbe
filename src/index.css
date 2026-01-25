@@ -143,6 +143,15 @@
     animation: pulse 3s ease-in-out infinite;
   }
 
+  .animate-bounce-slow {
+    animation: bounce-slow 2s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background-size: 200% 100%;
+  }
+
   @keyframes float {
     0%, 100% {
       transform: translateY(0);
@@ -150,5 +159,36 @@
     50% {
       transform: translateY(-10px);
     }
+  }
+
+  @keyframes bounce-slow {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes truck-move {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100vw);
+    }
+  }
+
+  .animate-truck {
+    animation: truck-move 15s linear infinite;
   }
 }
