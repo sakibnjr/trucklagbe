@@ -1,8 +1,10 @@
 import { Truck, Phone, Mail, MapPin, Facebook, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t, language } = useLanguage();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -19,6 +21,18 @@ const Footer = () => {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
+
+  const quickLinks = [
+    { labelKey: "nav.services", href: "#services" },
+    { labelKey: "nav.vehicles", href: "#vehicles" },
+    { labelKey: "nav.howItWorks", href: "#how-it-works" },
+    { labelKey: "footer.aboutUs", href: "#" },
+    { labelKey: "footer.terms", href: "#" },
+  ];
+
+  const vehicles = language === "bn"
+    ? ["ট্রাক", "পিকআপ", "পিকআপ ভ্যান", "প্রাইভেট কার", "হায়েস"]
+    : ["Truck", "Pickup", "Pickup Van", "Private Car", "Hiace"];
 
   return (
     <footer id="contact" className="bg-foreground text-primary-foreground/80">
@@ -45,7 +59,7 @@ const Footer = () => {
               </span>
             </motion.a>
             <p className="text-primary-foreground/60 mb-6">
-              বাংলাদেশের সবচেয়ে বিশ্বস্ত পরিবহন সেবা। যেকোনো ধরনের যানবাহন ভাড়া নিন সহজে ও দ্রুত।
+              {t("footer.description")}
             </p>
             <div className="flex gap-4">
               {[Facebook, Youtube].map((Icon, i) => (
@@ -64,22 +78,16 @@ const Footer = () => {
 
           {/* Quick Links */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-primary-foreground font-bold text-lg mb-6">দ্রুত লিংক</h4>
+            <h4 className="text-primary-foreground font-bold text-lg mb-6">{t("footer.quickLinks")}</h4>
             <ul className="space-y-4">
-              {[
-                { label: "সেবাসমূহ", href: "#services" },
-                { label: "যানবাহন", href: "#vehicles" },
-                { label: "কিভাবে কাজ করে", href: "#how-it-works" },
-                { label: "আমাদের সম্পর্কে", href: "#" },
-                { label: "শর্তাবলী", href: "#" },
-              ].map((link, i) => (
+              {quickLinks.map((link) => (
                 <motion.li 
-                  key={link.label}
+                  key={link.labelKey}
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <a href={link.href} className="hover:text-secondary transition-colors inline-block">
-                    {link.label}
+                    {t(link.labelKey)}
                   </a>
                 </motion.li>
               ))}
@@ -88,9 +96,9 @@ const Footer = () => {
 
           {/* Vehicles */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-primary-foreground font-bold text-lg mb-6">যানবাহন</h4>
+            <h4 className="text-primary-foreground font-bold text-lg mb-6">{t("nav.vehicles")}</h4>
             <ul className="space-y-4">
-              {["ট্রাক", "পিকআপ", "পিকআপ ভ্যান", "প্রাইভেট কার", "হায়েস"].map((vehicle) => (
+              {vehicles.map((vehicle) => (
                 <motion.li 
                   key={vehicle}
                   whileHover={{ x: 5 }}
@@ -106,7 +114,7 @@ const Footer = () => {
 
           {/* Contact */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-primary-foreground font-bold text-lg mb-6">যোগাযোগ</h4>
+            <h4 className="text-primary-foreground font-bold text-lg mb-6">{t("footer.contact")}</h4>
             <ul className="space-y-4">
               <motion.li 
                 className="flex items-start gap-3"
@@ -130,7 +138,7 @@ const Footer = () => {
                 whileHover={{ x: 5 }}
               >
                 <MapPin className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
-                <span>মিরপুর-১০, ঢাকা-১২১৬, বাংলাদেশ</span>
+                <span>{language === "bn" ? "মিরপুর-১০, ঢাকা-১২১৬, বাংলাদেশ" : "Mirpur-10, Dhaka-1216, Bangladesh"}</span>
               </motion.li>
             </ul>
           </motion.div>
@@ -146,10 +154,10 @@ const Footer = () => {
           viewport={{ once: true }}
         >
           <p className="text-primary-foreground/60 text-sm">
-            © {currentYear} ট্রাকলাগবে। সর্বস্বত্ব সংরক্ষিত।
+            © {currentYear} {language === "bn" ? "ট্রাকলাগবে।" : "TruckLagbe."} {t("footer.rights")}
           </p>
           <div className="flex gap-6 text-sm">
-            {["গোপনীয়তা নীতি", "ব্যবহারের শর্তাবলী"].map((link) => (
+            {[t("footer.privacy"), t("footer.terms")].map((link) => (
               <motion.a 
                 key={link}
                 href="#" 

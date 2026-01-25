@@ -2,11 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Phone, ArrowRight } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import ctaBg from "@/assets/cta-bg.jpg";
 
 const CTASection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { t } = useLanguage();
 
   return (
     <section className="relative py-20 md:py-28 overflow-hidden" ref={ref}>
@@ -71,7 +73,7 @@ const CTASection = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          এখনই শুরু করুন!
+          {t("cta.title")}
         </motion.h2>
         <motion.p 
           className="text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-10"
@@ -79,8 +81,7 @@ const CTASection = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          পরিবহনের ঝামেলা থেকে মুক্তি পান। এখনই ট্রাকলাগবে-তে বুকিং দিন 
-          অথবা সরাসরি কল করুন।
+          {t("cta.description")}
         </motion.p>
 
         <motion.div 
@@ -94,7 +95,7 @@ const CTASection = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Button size="lg" variant="hero" className="group">
-              বুকিং করুন
+              {t("cta.booking")}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </motion.div>

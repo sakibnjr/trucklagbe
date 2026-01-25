@@ -1,37 +1,46 @@
-import { Search, CalendarCheck, Truck, ThumbsUp } from "lucide-react";
+import { Search, CalendarCheck, Truck, ThumbsUp, LucideIcon } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const steps = [
-  {
-    icon: Search,
-    title: "যানবাহন খুঁজুন",
-    description: "আপনার প্রয়োজন অনুযায়ী ট্রাক, পিকআপ বা গাড়ি নির্বাচন করুন।",
-    step: "০১",
-  },
-  {
-    icon: CalendarCheck,
-    title: "বুকিং দিন",
-    description: "পিকআপ ও ডেলিভারি পয়েন্ট এবং সময়কাল নির্ধারণ করে বুক করুন।",
-    step: "০২",
-  },
-  {
-    icon: Truck,
-    title: "যানবাহন আসবে",
-    description: "নির্ধারিত সময়ে ড্রাইভার সহ যানবাহন আপনার কাছে পৌঁছে যাবে।",
-    step: "০৩",
-  },
-  {
-    icon: ThumbsUp,
-    title: "কাজ সম্পন্ন",
-    description: "নিরাপদে মালামাল পৌঁছে দিয়ে পেমেন্ট করুন। ব্যস, এতটাই সহজ!",
-    step: "০৪",
-  },
-];
+interface Step {
+  icon: LucideIcon;
+  titleKey: string;
+  descKey: string;
+  step: string;
+}
 
 const HowItWorksSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { t, language } = useLanguage();
+
+  const steps: Step[] = [
+    {
+      icon: Search,
+      titleKey: "howItWorks.step1.title",
+      descKey: "howItWorks.step1.desc",
+      step: language === "bn" ? "০১" : "01",
+    },
+    {
+      icon: CalendarCheck,
+      titleKey: "howItWorks.step2.title",
+      descKey: "howItWorks.step2.desc",
+      step: language === "bn" ? "০২" : "02",
+    },
+    {
+      icon: Truck,
+      titleKey: "howItWorks.step3.title",
+      descKey: "howItWorks.step3.desc",
+      step: language === "bn" ? "০৩" : "03",
+    },
+    {
+      icon: ThumbsUp,
+      titleKey: "howItWorks.step4.title",
+      descKey: "howItWorks.step4.desc",
+      step: language === "bn" ? "০৪" : "04",
+    },
+  ];
 
   return (
     <section id="how-it-works" className="py-20 md:py-28 bg-background" ref={ref}>
@@ -49,7 +58,7 @@ const HowItWorksSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.2 }}
           >
-            কিভাবে কাজ করে
+            {t("howItWorks.subtitle")}
           </motion.span>
           <motion.h2 
             className="text-3xl md:text-4xl font-bold text-foreground mt-3 mb-4"
@@ -57,7 +66,7 @@ const HowItWorksSection = () => {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
           >
-            মাত্র ৪টি সহজ ধাপে
+            {t("howItWorks.title")}
           </motion.h2>
           <motion.p 
             className="text-muted-foreground text-lg"
@@ -65,7 +74,7 @@ const HowItWorksSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.4 }}
           >
-            জটিলতা ছাড়াই দ্রুত ও সহজে যানবাহন ভাড়া নিন
+            {t("howItWorks.description")}
           </motion.p>
         </motion.div>
 
@@ -123,7 +132,7 @@ const HowItWorksSection = () => {
                 animate={isInView ? { opacity: 1 } : {}}
                 transition={{ delay: 0.5 + index * 0.15 }}
               >
-                {step.title}
+                {t(step.titleKey)}
               </motion.h3>
               <motion.p 
                 className="text-muted-foreground"
@@ -131,7 +140,7 @@ const HowItWorksSection = () => {
                 animate={isInView ? { opacity: 1 } : {}}
                 transition={{ delay: 0.6 + index * 0.15 }}
               >
-                {step.description}
+                {t(step.descKey)}
               </motion.p>
             </motion.div>
           ))}

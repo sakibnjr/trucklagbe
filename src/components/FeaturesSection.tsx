@@ -1,43 +1,51 @@
-import { Shield, Clock, Wallet, Headphones, MapPin, Users } from "lucide-react";
+import { Shield, Clock, Wallet, Headphones, MapPin, Users, LucideIcon } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const features = [
-  {
-    icon: Shield,
-    title: "নিরাপদ পরিবহন",
-    description: "অভিজ্ঞ ড্রাইভার ও বীমাকৃত যানবাহনে আপনার মালামাল সম্পূর্ণ নিরাপদ।",
-  },
-  {
-    icon: Clock,
-    title: "সময়মতো ডেলিভারি",
-    description: "আমরা সময়ের মূল্য বুঝি। নির্ধারিত সময়ে ডেলিভারি নিশ্চিত করি।",
-  },
-  {
-    icon: Wallet,
-    title: "সাশ্রয়ী মূল্য",
-    description: "বাজারের সবচেয়ে প্রতিযোগিতামূলক মূল্যে সেরা সেবা পাচ্ছেন।",
-  },
-  {
-    icon: Headphones,
-    title: "২৪/৭ সাপোর্ট",
-    description: "যেকোনো সমস্যায় আমাদের কাস্টমার কেয়ার টিম সর্বদা আপনার পাশে।",
-  },
-  {
-    icon: MapPin,
-    title: "সারাদেশে সেবা",
-    description: "বাংলাদেশের ৬৪ জেলায় আমাদের বিস্তৃত নেটওয়ার্ক রয়েছে।",
-  },
-  {
-    icon: Users,
-    title: "অভিজ্ঞ ড্রাইভার",
-    description: "প্রশিক্ষিত ও যাচাইকৃত ড্রাইভারদের সাথে নিশ্চিন্তে ভ্রমণ করুন।",
-  },
-];
+interface Feature {
+  icon: LucideIcon;
+  titleKey: string;
+  descKey: string;
+}
 
 const FeaturesSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { t } = useLanguage();
+
+  const features: Feature[] = [
+    {
+      icon: Shield,
+      titleKey: "features.safety.title",
+      descKey: "features.safety.desc",
+    },
+    {
+      icon: Clock,
+      titleKey: "features.time.title",
+      descKey: "features.time.desc",
+    },
+    {
+      icon: Wallet,
+      titleKey: "features.price.title",
+      descKey: "features.price.desc",
+    },
+    {
+      icon: Headphones,
+      titleKey: "features.support.title",
+      descKey: "features.support.desc",
+    },
+    {
+      icon: MapPin,
+      titleKey: "features.nationwide.title",
+      descKey: "features.nationwide.desc",
+    },
+    {
+      icon: Users,
+      titleKey: "features.drivers.title",
+      descKey: "features.drivers.desc",
+    },
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -76,7 +84,7 @@ const FeaturesSection = () => {
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2 }}
           >
-            কেন আমরা সেরা
+            {t("features.subtitle")}
           </motion.span>
           <motion.h2 
             className="text-3xl md:text-4xl font-bold text-foreground mt-3 mb-4"
@@ -84,7 +92,7 @@ const FeaturesSection = () => {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
           >
-            ট্রাকলাগবে কেন বেছে নেবেন?
+            {t("features.title")}
           </motion.h2>
           <motion.p 
             className="text-muted-foreground text-lg"
@@ -92,7 +100,7 @@ const FeaturesSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.4 }}
           >
-            আপনার পরিবহন অভিজ্ঞতাকে সহজ ও আনন্দদায়ক করতে আমরা প্রতিশ্রুতিবদ্ধ
+            {t("features.description")}
           </motion.p>
         </motion.div>
 
@@ -103,9 +111,9 @@ const FeaturesSection = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <motion.div
-              key={feature.title}
+              key={feature.titleKey}
               className="group bg-card rounded-2xl p-8 shadow-soft hover:shadow-card transition-all duration-300 border border-transparent hover:border-secondary/20 relative overflow-hidden"
               variants={cardVariants}
               whileHover={{ 
@@ -132,10 +140,10 @@ const FeaturesSection = () => {
 
               {/* Content */}
               <h3 className="relative text-xl font-bold text-foreground mb-3">
-                {feature.title}
+                {t(feature.titleKey)}
               </h3>
               <p className="relative text-muted-foreground leading-relaxed">
-                {feature.description}
+                {t(feature.descKey)}
               </p>
 
               {/* Animated Border */}
