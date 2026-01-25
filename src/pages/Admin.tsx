@@ -32,9 +32,11 @@ import {
   User as UserIcon,
   Phone,
   Clock,
+  Settings,
 } from "lucide-react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import AdminManagement from "@/components/AdminManagement";
 import type { Database } from "@/integrations/supabase/types";
 
 type Booking = Database["public"]["Tables"]["bookings"]["Row"];
@@ -66,6 +68,8 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [activeTab, setActiveTab] = useState<'bookings' | 'admins'>('bookings');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -115,6 +119,7 @@ const Admin = () => {
       return;
     }
 
+    setIsAdmin(data.role === 'admin');
     setIsLoading(false);
     fetchBookings();
   };
@@ -205,6 +210,16 @@ const Admin = () => {
             <span className="text-sm text-muted-foreground hidden md:block">
               {user?.email}
             </span>
+            {isAdmin && (
+              <Button
+                variant={activeTab === 'admins' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveTab(activeTab === 'bookings' ? 'admins' : 'bookings')}
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                {activeTab === 'bookings' ? 'অ্যাডমিন' : 'বুকিং'}
+              </Button>
+            )}
             <Button variant="outline" size="sm" onClick={handleLogout}>
               <LogOut className="w-4 h-4 mr-2" />
               লগআউট
@@ -220,21 +235,25 @@ const Admin = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            {Object.entries(statusConfig).map(([status, config]) => {
-              const count = bookings.filter((b) => b.status === status).length;
-              return (
-                <motion.div
-                  key={status}
-                  className="bg-card rounded-xl p-4 border"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="text-3xl font-bold text-foreground">{count}</div>
-                  <div className="text-sm text-muted-foreground">{config.label}</div>
-                </motion.div>
-              );
-            })}
+          {activeTab === 'admins' && isAdmin ? (
+            <AdminManagement />
+          ) : (
+            <>
+              {/* Stats Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+                {Object.entries(statusConfig).map(([status, config]) => {
+                  const count = bookings.filter((b) => b.status === status).length;
+                  return (
+                    <motion.div
+                      key={status}
+                      className="bg-card rounded-xl p-4 border"
+                      whileHover={{ scale: 1.02 }}
+                    >
+                      <div className="text-3xl font-bold text-foreground">{count}</div>
+                      <div className="text-sm text-muted-foreground">{config.label}</div>
+                    </motion.div>
+                  );
+                })}
           </div>
 
           {/* Filters */}
@@ -380,10 +399,12 @@ const Admin = () => {
             </div>
           </div>
 
-          {/* Summary */}
-          <div className="mt-4 text-sm text-muted-foreground text-center">
-            মোট {filteredBookings.length} টি বুকিং দেখাচ্ছে (সর্বমোট {bookings.length} টি)
-          </div>
+              {/* Summary */}
+              <div className="mt-4 text-sm text-muted-foreground text-center">
+                মোট {filteredBookings.length} টি বুকিং দেখাচ্ছে (সর্বমোট {bookings.length} টি)
+              </div>
+            </>
+          )}
         </motion.div>
       </main>
     </div>

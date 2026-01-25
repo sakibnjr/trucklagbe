@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 const AdminAuth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -20,13 +19,11 @@ const AdminAuth = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (session?.user) {
-          // Check if user has admin role
           checkAdminRole(session.user.id);
         }
       }
     );
 
-    // Check existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         checkAdminRole(session.user.id);
@@ -63,34 +60,17 @@ const AdminAuth = () => {
     setIsLoading(true);
 
     try {
-      if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        toast({
-          title: "সফল",
-          description: "লগইন সফল হয়েছে",
-        });
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/admin`,
-          },
-        });
-
-        if (error) throw error;
-
-        toast({
-          title: "সফল",
-          description: "অ্যাকাউন্ট তৈরি হয়েছে। এডমিন অনুমোদনের জন্য অপেক্ষা করুন।",
-        });
-      }
+      toast({
+        title: "সফল",
+        description: "লগইন সফল হয়েছে",
+      });
     } catch (error: any) {
       toast({
         title: "ত্রুটি",
@@ -119,10 +99,10 @@ const AdminAuth = () => {
               <Truck className="w-8 h-8 text-primary-foreground" />
             </motion.div>
             <h1 className="text-2xl font-bold text-foreground">
-              {isLogin ? "অ্যাডমিন লগইন" : "অ্যাকাউন্ট তৈরি করুন"}
+              অ্যাডমিন লগইন
             </h1>
             <p className="text-muted-foreground mt-2">
-              {isLogin ? "আপনার অ্যাকাউন্টে লগইন করুন" : "নতুন অ্যাকাউন্ট তৈরি করুন"}
+              আপনার অ্যাকাউন্টে লগইন করুন
             </p>
           </div>
 
@@ -160,19 +140,9 @@ const AdminAuth = () => {
               className="w-full h-12"
               disabled={isLoading}
             >
-              {isLoading ? "অপেক্ষা করুন..." : isLogin ? "লগইন করুন" : "রেজিস্টার করুন"}
+              {isLoading ? "অপেক্ষা করুন..." : "লগইন করুন"}
             </Button>
           </form>
-
-          <div className="mt-6 text-center">
-            <button
-              type="button"
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-sm text-primary hover:underline"
-            >
-              {isLogin ? "নতুন অ্যাকাউন্ট তৈরি করুন" : "ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন"}
-            </button>
-          </div>
 
           <div className="mt-6 text-center">
             <Link
