@@ -6,6 +6,7 @@ import FeaturesSection from "@/components/FeaturesSection";
 import ServiceAreasSection from "@/components/ServiceAreasSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <ServiceAreasSection />
       <CTASection />
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 };
