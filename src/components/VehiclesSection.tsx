@@ -1,5 +1,8 @@
 import { Truck, Car, Bus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
 const vehicles = [
   {
@@ -45,34 +48,92 @@ const vehicles = [
 ];
 
 const VehiclesSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.9 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { duration: 0.5 }
+    },
+  };
+
   return (
-    <section id="vehicles" className="py-20 md:py-28 bg-muted/50">
+    <section id="vehicles" className="py-20 md:py-28 bg-muted/50" ref={ref}>
       <div className="container">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="text-secondary font-semibold text-sm uppercase tracking-wider">
+        <motion.div 
+          className="text-center max-w-2xl mx-auto mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.span 
+            className="text-secondary font-semibold text-sm uppercase tracking-wider"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.2 }}
+          >
             আমাদের যানবাহন
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-3 mb-4">
+          </motion.span>
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold text-foreground mt-3 mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
             আপনার প্রয়োজন অনুযায়ী বেছে নিন
-          </h2>
-          <p className="text-muted-foreground text-lg">
+          </motion.h2>
+          <motion.p 
+            className="text-muted-foreground text-lg"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.4 }}
+          >
             ট্রাক থেকে প্রাইভেট কার - সব ধরনের যানবাহন এক জায়গায়
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Vehicles Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {vehicles.map((vehicle, index) => (
-            <div
+        <motion.div 
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          {vehicles.map((vehicle) => (
+            <motion.div
               key={vehicle.id}
-              className="group bg-card rounded-2xl p-6 shadow-soft hover:shadow-card transition-all duration-300 hover:-translate-y-1"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="group bg-card rounded-2xl p-6 shadow-soft hover:shadow-card transition-all duration-300 border border-transparent hover:border-secondary/20"
+              variants={cardVariants}
+              whileHover={{ 
+                y: -10, 
+                scale: 1.02,
+                transition: { duration: 0.3 }
+              }}
             >
               {/* Icon */}
-              <div className="w-14 h-14 rounded-xl hero-gradient flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <motion.div 
+                className="w-14 h-14 rounded-xl hero-gradient flex items-center justify-center mb-5"
+                whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+                transition={{ duration: 0.4 }}
+              >
                 <vehicle.icon className="w-7 h-7 text-primary-foreground" />
-              </div>
+              </motion.div>
 
               {/* Content */}
               <h3 className="text-xl font-bold text-foreground mb-2">
@@ -83,29 +144,40 @@ const VehiclesSection = () => {
               </p>
 
               {/* Capacity Badge */}
-              <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-sm font-medium mb-4">
+              <motion.div 
+                className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-sm font-medium mb-4"
+                whileHover={{ scale: 1.05 }}
+              >
                 ধারণক্ষমতা: {vehicle.capacity}
-              </div>
+              </motion.div>
 
               {/* Features */}
               <div className="flex flex-wrap gap-2 mb-5">
-                {vehicle.features.map((feature) => (
-                  <span
+                {vehicle.features.map((feature, i) => (
+                  <motion.span
                     key={feature}
                     className="bg-muted text-muted-foreground px-3 py-1 rounded-full text-xs"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ delay: 0.5 + i * 0.1 }}
                   >
                     {feature}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
 
               {/* CTA */}
-              <Button variant="outline" className="w-full">
-                বুক করুন
-              </Button>
-            </div>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                  বুক করুন
+                </Button>
+              </motion.div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
