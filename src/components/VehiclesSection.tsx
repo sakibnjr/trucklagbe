@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useBooking } from "@/contexts/BookingContext";
 
 // Import vehicle images
 import truckImage from "@/assets/vehicles/truck.jpg";
@@ -11,8 +12,10 @@ import pickupVanImage from "@/assets/vehicles/pickup-van.jpg";
 import privateCarImage from "@/assets/vehicles/private-car.jpg";
 import hiaceImage from "@/assets/vehicles/hiace.jpg";
 
+type VehicleType = 'truck' | 'pickup' | 'pickup-van' | 'private-car' | 'hiace';
+
 interface VehicleData {
-  id: string;
+  id: VehicleType;
   nameKey: string;
   descKey: string;
   capacityKey: string;
@@ -24,6 +27,7 @@ const VehiclesSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t, language } = useLanguage();
+  const { setSelectedVehicle, scrollToBooking } = useBooking();
 
   const vehicles: VehicleData[] = [
     {
@@ -77,6 +81,11 @@ const VehiclesSection = () => {
         : ["Group travel", "Wedding", "Picnic"],
     },
   ];
+
+  const handleSelectVehicle = (vehicleId: VehicleType) => {
+    setSelectedVehicle(vehicleId);
+    scrollToBooking();
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -200,7 +209,11 @@ const VehiclesSection = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                  <Button 
+                    variant="outline" 
+                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all"
+                    onClick={() => handleSelectVehicle(vehicle.id)}
+                  >
                     {t("vehicles.select")}
                   </Button>
                 </motion.div>
