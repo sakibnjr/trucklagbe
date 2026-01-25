@@ -396,14 +396,14 @@ const HeroSection = () => {
           {/* Booking Form */}
           <motion.div 
             ref={bookingFormRef}
-            className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated transition-all duration-300"
+            className="bg-card rounded-xl md:rounded-2xl p-4 sm:p-6 md:p-8 shadow-elevated transition-all duration-300"
             initial={{ opacity: 0, x: 50, rotateY: -10 }}
             animate={{ opacity: 1, x: 0, rotateY: 0 }}
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
             whileHover={{ y: -5, boxShadow: "0 30px 60px -20px rgba(0,0,0,0.3)" }}
           >
             <motion.h2 
-              className="text-2xl font-bold text-foreground mb-6"
+              className="text-xl sm:text-2xl font-bold text-foreground mb-4 md:mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
@@ -411,34 +411,34 @@ const HeroSection = () => {
               {t("form.title")}
             </motion.h2>
             
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-3 md:space-y-4" onSubmit={handleSubmit}>
               {/* Customer Name & Phone Row */}
               <motion.div 
-                className="grid grid-cols-2 gap-3"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.85 }}
               >
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <User className="w-4 h-4 text-secondary" />
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <User className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
                     {t("form.name")}
                   </label>
                   <Input 
                     placeholder={t("form.namePlaceholder")}
-                    className="h-12" 
+                    className="h-10 md:h-12 text-sm" 
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-secondary" />
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <Phone className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
                     {t("form.phone")}
                   </label>
                   <Input 
                     placeholder="01XXXXXXXXX" 
-                    className="h-12" 
+                    className="h-10 md:h-12 text-sm" 
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value)}
                   />
@@ -447,17 +447,17 @@ const HeroSection = () => {
 
               {/* Vehicle Type */}
               <motion.div 
-                className="space-y-2"
+                className="space-y-1.5 md:space-y-2"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.9 }}
               >
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Truck className="w-4 h-4 text-secondary" />
+                <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                  <Truck className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
                   {t("form.vehicleType")}
                 </label>
                 <Select value={vehicleType} onValueChange={(value: VehicleType) => setVehicleType(value)}>
-                  <SelectTrigger className="h-12">
+                  <SelectTrigger className="h-10 md:h-12 text-sm">
                     <SelectValue placeholder={t("form.vehiclePlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
@@ -470,55 +470,50 @@ const HeroSection = () => {
                 </Select>
               </motion.div>
 
-              {/* Pickup Location */}
+              {/* Pickup & Delivery Locations */}
               <motion.div 
-                className="space-y-2"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.0 }}
               >
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-secondary" />
-                  {t("form.pickup")}
-                </label>
-                <Input 
-                  placeholder={t("form.pickupPlaceholder")}
-                  className="h-12" 
-                  value={pickupLocation}
-                  onChange={(e) => setPickupLocation(e.target.value)}
-                />
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
+                    {t("form.pickup")}
+                  </label>
+                  <Input 
+                    placeholder={t("form.pickupPlaceholder")}
+                    className="h-10 md:h-12 text-sm" 
+                    value={pickupLocation}
+                    onChange={(e) => setPickupLocation(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" />
+                    {t("form.delivery")}
+                  </label>
+                  <Input 
+                    placeholder={t("form.deliveryPlaceholder")}
+                    className="h-10 md:h-12 text-sm" 
+                    value={deliveryLocation}
+                    onChange={(e) => setDeliveryLocation(e.target.value)}
+                  />
+                </div>
               </motion.div>
 
-              {/* Delivery Location */}
+              {/* Date, Time & Duration Row */}
               <motion.div 
-                className="space-y-2"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.1 }}
-              >
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-primary" />
-                  {t("form.delivery")}
-                </label>
-                <Input 
-                  placeholder={t("form.deliveryPlaceholder")}
-                  className="h-12" 
-                  value={deliveryLocation}
-                  onChange={(e) => setDeliveryLocation(e.target.value)}
-                />
-              </motion.div>
-
-              {/* Date and Time Row */}
-              <motion.div 
-                className="grid grid-cols-2 gap-3"
+                className="grid grid-cols-2 sm:grid-cols-3 gap-3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.2 }}
               >
                 {/* Date Picker */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <CalendarIcon className="w-4 h-4 text-secondary" />
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <CalendarIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
                     {t("form.date")}
                   </label>
                   <Popover>
@@ -526,12 +521,14 @@ const HeroSection = () => {
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full h-12 justify-start text-left font-normal",
+                          "w-full h-10 md:h-12 justify-start text-left font-normal text-sm px-3",
                           !pickupDate && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {pickupDate ? formatDate(pickupDate) : t("form.datePlaceholder")}
+                        <CalendarIcon className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                        <span className="truncate">
+                          {pickupDate ? formatDate(pickupDate) : t("form.datePlaceholder")}
+                        </span>
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -548,13 +545,13 @@ const HeroSection = () => {
                 </div>
 
                 {/* Time Picker */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-secondary" />
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
                     {t("form.time")}
                   </label>
                   <Select value={pickupTime} onValueChange={setPickupTime}>
-                    <SelectTrigger className="h-12">
+                    <SelectTrigger className="h-10 md:h-12 text-sm">
                       <SelectValue placeholder={t("form.timePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -566,49 +563,45 @@ const HeroSection = () => {
                     </SelectContent>
                   </Select>
                 </div>
-              </motion.div>
 
-              {/* Duration */}
-              <motion.div 
-                className="space-y-2"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.3 }}
-              >
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-secondary" />
-                  {t("form.duration")}
-                </label>
-                <Select value={duration} onValueChange={setDuration}>
-                  <SelectTrigger className="h-12">
-                    <SelectValue placeholder={t("form.durationPlaceholder")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {durationOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {/* Duration */}
+                <div className="space-y-1.5 md:space-y-2 col-span-2 sm:col-span-1">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
+                    {t("form.duration")}
+                  </label>
+                  <Select value={duration} onValueChange={setDuration}>
+                    <SelectTrigger className="h-10 md:h-12 text-sm">
+                      <SelectValue placeholder={t("form.durationPlaceholder")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {durationOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 }}
+                transition={{ delay: 1.3 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                className="pt-1 md:pt-2"
               >
                 <Button 
                   type="submit" 
                   variant="secondary" 
                   size="lg" 
-                  className="w-full group"
+                  className="w-full group h-11 md:h-14 text-sm md:text-base"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? t("form.submitting") : t("form.submit")}
-                  {!isSubmitting && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+                  {!isSubmitting && <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />}
                 </Button>
               </motion.div>
             </form>
