@@ -1,8 +1,14 @@
-import { Truck, Car, Bus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+
+// Import vehicle images
+import truckImage from "@/assets/vehicles/truck.jpg";
+import pickupImage from "@/assets/vehicles/pickup.jpg";
+import pickupVanImage from "@/assets/vehicles/pickup-van.jpg";
+import privateCarImage from "@/assets/vehicles/private-car.jpg";
+import hiaceImage from "@/assets/vehicles/hiace.jpg";
 
 const vehicles = [
   {
@@ -10,7 +16,7 @@ const vehicles = [
     name: "ট্রাক",
     description: "ভারী মালামাল পরিবহনের জন্য আদর্শ। বড় আকারের সব ধরনের পণ্য বহনে সক্ষম।",
     capacity: "৫-১০ টন",
-    icon: Truck,
+    image: truckImage,
     features: ["বড় মালামাল", "ফার্নিচার", "নির্মাণ সামগ্রী"],
   },
   {
@@ -18,7 +24,7 @@ const vehicles = [
     name: "পিকআপ",
     description: "মাঝারি আকারের মালামাল পরিবহনে সুবিধাজনক এবং দ্রুত।",
     capacity: "১-২ টন",
-    icon: Truck,
+    image: pickupImage,
     features: ["ছোট মালামাল", "বাসা বদল", "অফিস সামগ্রী"],
   },
   {
@@ -26,7 +32,7 @@ const vehicles = [
     name: "পিকআপ ভ্যান",
     description: "কভার্ড ভ্যান - বৃষ্টি বা রোদে আপনার মালামাল সুরক্ষিত।",
     capacity: "১-১.৫ টন",
-    icon: Truck,
+    image: pickupVanImage,
     features: ["ইলেকট্রনিক্স", "সংবেদনশীল পণ্য", "খাদ্যদ্রব্য"],
   },
   {
@@ -34,7 +40,7 @@ const vehicles = [
     name: "প্রাইভেট কার",
     description: "আরামদায়ক ব্যক্তিগত ভ্রমণের জন্য এসি গাড়ি।",
     capacity: "৪-৫ জন",
-    icon: Car,
+    image: privateCarImage,
     features: ["শহরের ভেতরে", "এয়ারপোর্ট পিক", "ট্যুর"],
   },
   {
@@ -42,7 +48,7 @@ const vehicles = [
     name: "হায়েস",
     description: "দলগত ভ্রমণ বা বেশি যাত্রী বহনে আদর্শ মাইক্রোবাস।",
     capacity: "১০-১৫ জন",
-    icon: Bus,
+    image: hiaceImage,
     features: ["গ্রুপ ট্রাভেল", "বিয়ে বাড়ি", "পিকনিক"],
   },
 ];
@@ -118,7 +124,7 @@ const VehiclesSection = () => {
           {vehicles.map((vehicle) => (
             <motion.div
               key={vehicle.id}
-              className="group bg-card rounded-2xl p-6 shadow-soft hover:shadow-card transition-all duration-300 border border-transparent hover:border-secondary/20"
+              className="group relative bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-card transition-all duration-300 border border-transparent hover:border-secondary/20"
               variants={cardVariants}
               whileHover={{ 
                 y: -10, 
@@ -126,55 +132,58 @@ const VehiclesSection = () => {
                 transition: { duration: 0.3 }
               }}
             >
-              {/* Icon */}
-              <motion.div 
-                className="w-14 h-14 rounded-xl hero-gradient flex items-center justify-center mb-5"
-                whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
-                transition={{ duration: 0.4 }}
-              >
-                <vehicle.icon className="w-7 h-7 text-primary-foreground" />
-              </motion.div>
-
-              {/* Content */}
-              <h3 className="text-xl font-bold text-foreground mb-2">
-                {vehicle.name}
-              </h3>
-              <p className="text-muted-foreground text-sm mb-4">
-                {vehicle.description}
-              </p>
-
-              {/* Capacity Badge */}
-              <motion.div 
-                className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-sm font-medium mb-4"
-                whileHover={{ scale: 1.05 }}
-              >
-                ধারণক্ষমতা: {vehicle.capacity}
-              </motion.div>
-
-              {/* Features */}
-              <div className="flex flex-wrap gap-2 mb-5">
-                {vehicle.features.map((feature, i) => (
-                  <motion.span
-                    key={feature}
-                    className="bg-muted text-muted-foreground px-3 py-1 rounded-full text-xs"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ delay: 0.5 + i * 0.1 }}
-                  >
-                    {feature}
-                  </motion.span>
-                ))}
+              {/* Vehicle Image */}
+              <div className="relative h-48 overflow-hidden">
+                <img 
+                  src={vehicle.image} 
+                  alt={vehicle.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+                
+                {/* Capacity Badge on Image */}
+                <motion.div 
+                  className="absolute top-4 right-4 bg-secondary text-secondary-foreground px-3 py-1.5 rounded-full text-sm font-bold shadow-lg"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  {vehicle.capacity}
+                </motion.div>
               </div>
 
-              {/* CTA */}
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                  বুক করুন
-                </Button>
-              </motion.div>
+              {/* Content */}
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-foreground mb-2">
+                  {vehicle.name}
+                </h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  {vehicle.description}
+                </p>
+
+                {/* Features */}
+                <div className="flex flex-wrap gap-2 mb-5">
+                  {vehicle.features.map((feature, i) => (
+                    <motion.span
+                      key={feature}
+                      className="bg-muted text-muted-foreground px-3 py-1 rounded-full text-xs"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                      transition={{ delay: 0.5 + i * 0.1 }}
+                    >
+                      {feature}
+                    </motion.span>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                    বুক করুন
+                  </Button>
+                </motion.div>
+              </div>
             </motion.div>
           ))}
         </motion.div>
