@@ -1,11 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
+import ctaBg from "@/assets/cta-bg.jpg";
 
 const CTASection = () => {
   return (
-    <section className="py-20 md:py-28 hero-gradient relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
+    <section className="relative py-20 md:py-28 overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${ctaBg})` }}
+      />
+      
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/90 to-primary/85" />
+
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-foreground rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-secondary rounded-full blur-3xl" />
       </div>

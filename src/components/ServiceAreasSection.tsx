@@ -1,4 +1,5 @@
 import { MapPin } from "lucide-react";
+import serviceAreasBg from "@/assets/service-areas-bg.jpg";
 
 const majorCities = [
   "ঢাকা",
@@ -17,8 +18,17 @@ const majorCities = [
 
 const ServiceAreasSection = () => {
   return (
-    <section className="py-20 md:py-28 bg-background">
-      <div className="container">
+    <section className="relative py-20 md:py-28 overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${serviceAreasBg})` }}
+      />
+      
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/95 to-background/80" />
+
+      <div className="container relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div>
@@ -38,7 +48,7 @@ const ServiceAreasSection = () => {
               {majorCities.map((city) => (
                 <div
                   key={city}
-                  className="flex items-center gap-2 bg-muted px-3 py-2 rounded-lg"
+                  className="flex items-center gap-2 bg-card/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-soft border border-border/50"
                 >
                   <MapPin className="w-4 h-4 text-secondary flex-shrink-0" />
                   <span className="text-sm font-medium text-foreground truncate">
@@ -59,13 +69,13 @@ const ServiceAreasSection = () => {
             <div className="aspect-square max-w-md mx-auto">
               {/* Decorative circles representing service coverage */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-full rounded-full border-2 border-dashed border-secondary/20 animate-pulse-slow" />
+                <div className="w-full h-full rounded-full border-2 border-dashed border-secondary/30 animate-pulse-slow" />
               </div>
               <div className="absolute inset-8 flex items-center justify-center">
-                <div className="w-full h-full rounded-full border-2 border-dashed border-secondary/30" />
+                <div className="w-full h-full rounded-full border-2 border-dashed border-secondary/40" />
               </div>
               <div className="absolute inset-16 flex items-center justify-center">
-                <div className="w-full h-full rounded-full border-2 border-dashed border-secondary/40" />
+                <div className="w-full h-full rounded-full border-2 border-dashed border-secondary/50" />
               </div>
               
               {/* Center Logo */}
@@ -79,16 +89,16 @@ const ServiceAreasSection = () => {
               </div>
 
               {/* Floating City Markers */}
-              <div className="absolute top-8 left-1/4 bg-card shadow-card px-3 py-2 rounded-lg animate-float">
+              <div className="absolute top-8 left-1/4 bg-card shadow-card px-3 py-2 rounded-lg animate-float border border-border/50">
                 <span className="text-sm font-medium text-foreground">ঢাকা</span>
               </div>
-              <div className="absolute top-1/4 right-8 bg-card shadow-card px-3 py-2 rounded-lg animate-float" style={{ animationDelay: "1s" }}>
+              <div className="absolute top-1/4 right-8 bg-card shadow-card px-3 py-2 rounded-lg animate-float border border-border/50" style={{ animationDelay: "1s" }}>
                 <span className="text-sm font-medium text-foreground">চট্টগ্রাম</span>
               </div>
-              <div className="absolute bottom-1/4 left-8 bg-card shadow-card px-3 py-2 rounded-lg animate-float" style={{ animationDelay: "2s" }}>
+              <div className="absolute bottom-1/4 left-8 bg-card shadow-card px-3 py-2 rounded-lg animate-float border border-border/50" style={{ animationDelay: "2s" }}>
                 <span className="text-sm font-medium text-foreground">সিলেট</span>
               </div>
-              <div className="absolute bottom-8 right-1/4 bg-card shadow-card px-3 py-2 rounded-lg animate-float" style={{ animationDelay: "1.5s" }}>
+              <div className="absolute bottom-8 right-1/4 bg-card shadow-card px-3 py-2 rounded-lg animate-float border border-border/50" style={{ animationDelay: "1.5s" }}>
                 <span className="text-sm font-medium text-foreground">খুলনা</span>
               </div>
             </div>
