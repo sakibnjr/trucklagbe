@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Truck, ArrowRight } from "lucide-react";
+import { MapPin, Calendar, Truck, ArrowRight, Clock, CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,16 +8,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { format } from "date-fns";
+import { bn } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
+  const [pickupDate, setPickupDate] = useState<Date>();
+  const [pickupTime, setPickupTime] = useState<string>("");
+
   const vehicleTypes = [
     { value: "truck", label: "ট্রাক" },
     { value: "pickup", label: "পিকআপ" },
     { value: "pickup-van", label: "পিকআপ ভ্যান" },
     { value: "private-car", label: "প্রাইভেট কার" },
     { value: "hiace", label: "হায়েস" },
+  ];
+
+  const timeSlots = [
+    { value: "06:00", label: "সকাল ৬:০০" },
+    { value: "07:00", label: "সকাল ৭:০০" },
+    { value: "08:00", label: "সকাল ৮:০০" },
+    { value: "09:00", label: "সকাল ৯:০০" },
+    { value: "10:00", label: "সকাল ১০:০০" },
+    { value: "11:00", label: "সকাল ১১:০০" },
+    { value: "12:00", label: "দুপুর ১২:০০" },
+    { value: "13:00", label: "দুপুর ১:০০" },
+    { value: "14:00", label: "দুপুর ২:০০" },
+    { value: "15:00", label: "বিকাল ৩:০০" },
+    { value: "16:00", label: "বিকাল ৪:০০" },
+    { value: "17:00", label: "বিকাল ৫:০০" },
+    { value: "18:00", label: "সন্ধ্যা ৬:০০" },
+    { value: "19:00", label: "সন্ধ্যা ৭:০০" },
+    { value: "20:00", label: "রাত ৮:০০" },
+    { value: "21:00", label: "রাত ৯:০০" },
+  ];
+
+  const durationOptions = [
+    { value: "1", label: "১ দিন" },
+    { value: "2", label: "২ দিন" },
+    { value: "3", label: "৩ দিন" },
+    { value: "7", label: "১ সপ্তাহ" },
+    { value: "15", label: "১৫ দিন" },
+    { value: "30", label: "১ মাস" },
   ];
 
   const containerVariants = {
@@ -47,6 +88,15 @@ const HeroSection = () => {
       scale: 1,
       transition: { duration: 0.5 }
     },
+  };
+
+  // Format date in Bengali
+  const formatDateBengali = (date: Date) => {
+    const day = date.getDate().toLocaleString('bn-BD');
+    const months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+    const month = months[date.getMonth()];
+    const year = date.getFullYear().toLocaleString('bn-BD').replace(/,/g, '');
+    return `${day} ${month}, ${year}`;
   };
 
   return (
@@ -195,54 +245,149 @@ const HeroSection = () => {
               এখনই বুকিং করুন
             </motion.h2>
             
-            <form className="space-y-5">
-              {[
-                { icon: Truck, label: "যানবাহনের ধরন", isSelect: true, options: vehicleTypes, placeholder: "যানবাহন নির্বাচন করুন" },
-                { icon: MapPin, label: "পিকআপ পয়েন্ট", isSelect: false, placeholder: "কোথা থেকে তুলবেন?" },
-                { icon: MapPin, label: "ডেলিভারি পয়েন্ট", isSelect: false, placeholder: "কোথায় পৌঁছাবেন?" },
-                { icon: Calendar, label: "কতদিনের জন্য", isSelect: true, options: [
-                  { value: "1", label: "১ দিন" },
-                  { value: "2", label: "২ দিন" },
-                  { value: "3", label: "৩ দিন" },
-                  { value: "7", label: "১ সপ্তাহ" },
-                  { value: "15", label: "১৫ দিন" },
-                  { value: "30", label: "১ মাস" },
-                ], placeholder: "সময়কাল নির্বাচন করুন" },
-              ].map((field, index) => (
-                <motion.div 
-                  key={field.label}
-                  className="space-y-2"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.9 + index * 0.1 }}
-                >
+            <form className="space-y-4">
+              {/* Vehicle Type */}
+              <motion.div 
+                className="space-y-2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.9 }}
+              >
+                <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                  <Truck className="w-4 h-4 text-secondary" />
+                  যানবাহনের ধরন
+                </label>
+                <Select>
+                  <SelectTrigger className="h-12">
+                    <SelectValue placeholder="যানবাহন নির্বাচন করুন" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {vehicleTypes.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </motion.div>
+
+              {/* Pickup Location */}
+              <motion.div 
+                className="space-y-2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.0 }}
+              >
+                <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-secondary" />
+                  পিকআপ পয়েন্ট
+                </label>
+                <Input placeholder="কোথা থেকে তুলবেন?" className="h-12" />
+              </motion.div>
+
+              {/* Delivery Location */}
+              <motion.div 
+                className="space-y-2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.1 }}
+              >
+                <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-primary" />
+                  ডেলিভারি পয়েন্ট
+                </label>
+                <Input placeholder="কোথায় পৌঁছাবেন?" className="h-12" />
+              </motion.div>
+
+              {/* Date and Time Row */}
+              <motion.div 
+                className="grid grid-cols-2 gap-3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.2 }}
+              >
+                {/* Date Picker */}
+                <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <field.icon className="w-4 h-4 text-secondary" />
-                    {field.label}
+                    <CalendarIcon className="w-4 h-4 text-secondary" />
+                    তারিখ
                   </label>
-                  {field.isSelect ? (
-                    <Select>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder={field.placeholder} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {field.options?.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <Input placeholder={field.placeholder} className="h-12" />
-                  )}
-                </motion.div>
-              ))}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full h-12 justify-start text-left font-normal",
+                          !pickupDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {pickupDate ? formatDateBengali(pickupDate) : "তারিখ নির্বাচন"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <CalendarComponent
+                        mode="single"
+                        selected={pickupDate}
+                        onSelect={setPickupDate}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                        className="p-3 pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {/* Time Picker */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-secondary" />
+                    সময়
+                  </label>
+                  <Select value={pickupTime} onValueChange={setPickupTime}>
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="সময় নির্বাচন" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timeSlots.map((slot) => (
+                        <SelectItem key={slot.value} value={slot.value}>
+                          {slot.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </motion.div>
+
+              {/* Duration */}
+              <motion.div 
+                className="space-y-2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.3 }}
+              >
+                <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-secondary" />
+                  কতদিনের জন্য
+                </label>
+                <Select>
+                  <SelectTrigger className="h-12">
+                    <SelectValue placeholder="সময়কাল নির্বাচন করুন" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {durationOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.3 }}
+                transition={{ delay: 1.4 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
