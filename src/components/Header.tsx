@@ -61,7 +61,6 @@ const Header = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4, duration: 0.4 }}
         >
-          <Button variant="ghost">লগইন</Button>
           <Button variant="secondary">বুকিং করুন</Button>
         </motion.div>
 
@@ -100,7 +99,6 @@ const Header = () => {
                 </motion.a>
               ))}
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                <Button variant="ghost" className="w-full">লগইন</Button>
                 <Button variant="secondary" className="w-full">বুকিং করুন</Button>
               </div>
             </nav>
