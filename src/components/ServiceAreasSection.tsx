@@ -1,26 +1,31 @@
 import { MapPin } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import serviceAreasBg from "@/assets/service-areas-bg.jpg";
-
-const majorCities = [
-  "ঢাকা",
-  "চট্টগ্রাম",
-  "সিলেট",
-  "রাজশাহী",
-  "খুলনা",
-  "বরিশাল",
-  "রংপুর",
-  "ময়মনসিংহ",
-  "কুমিল্লা",
-  "গাজীপুর",
-  "নারায়ণগঞ্জ",
-  "সাভার",
-];
 
 const ServiceAreasSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { t, language } = useLanguage();
+
+  const majorCities = language === "bn" 
+    ? ["ঢাকা", "চট্টগ্রাম", "সিলেট", "রাজশাহী", "খুলনা", "বরিশাল", "রংপুর", "ময়মনসিংহ", "কুমিল্লা", "গাজীপুর", "নারায়ণগঞ্জ", "সাভার"]
+    : ["Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Khulna", "Barisal", "Rangpur", "Mymensingh", "Comilla", "Gazipur", "Narayanganj", "Savar"];
+
+  const floatingCities = language === "bn"
+    ? [
+        { city: "ঢাকা", position: "top-8 left-1/4", delay: 0 },
+        { city: "চট্টগ্রাম", position: "top-1/4 right-8", delay: 1 },
+        { city: "সিলেট", position: "bottom-1/4 left-8", delay: 2 },
+        { city: "খুলনা", position: "bottom-8 right-1/4", delay: 1.5 },
+      ]
+    : [
+        { city: "Dhaka", position: "top-8 left-1/4", delay: 0 },
+        { city: "Chittagong", position: "top-1/4 right-8", delay: 1 },
+        { city: "Sylhet", position: "bottom-1/4 left-8", delay: 2 },
+        { city: "Khulna", position: "bottom-8 right-1/4", delay: 1.5 },
+      ];
 
   const cityVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -62,7 +67,7 @@ const ServiceAreasSection = () => {
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.2 }}
             >
-              সেবা এলাকা
+              {t("serviceAreas.subtitle")}
             </motion.span>
             <motion.h2 
               className="text-3xl md:text-4xl font-bold text-foreground mt-3 mb-6"
@@ -70,7 +75,7 @@ const ServiceAreasSection = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.3 }}
             >
-              সারা বাংলাদেশে আমাদের সেবা
+              {t("serviceAreas.title")}
             </motion.h2>
             <motion.p 
               className="text-muted-foreground text-lg mb-8"
@@ -78,8 +83,7 @@ const ServiceAreasSection = () => {
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.4 }}
             >
-              ঢাকা থেকে চট্টগ্রাম, সিলেট থেকে খুলনা - দেশের যেকোনো প্রান্তে আমরা আছি। 
-              ৬৪ জেলার প্রতিটিতে আমাদের বিশ্বস্ত নেটওয়ার্ক রয়েছে।
+              {t("serviceAreas.description")}
             </motion.p>
 
             {/* Major Cities */}
@@ -124,8 +128,8 @@ const ServiceAreasSection = () => {
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
-                +৫০ টি
-              </motion.span> আরও জেলায় সেবা চলমান
+                {language === "bn" ? "+৫০ টি" : "+50"}
+              </motion.span> {language === "bn" ? "আরও জেলায় সেবা চলমান" : "more districts served"}
             </motion.p>
           </motion.div>
 
@@ -186,20 +190,15 @@ const ServiceAreasSection = () => {
                       animate={isInView ? { opacity: 1 } : {}}
                       transition={{ delay: 0.8 }}
                     >
-                      ৬৪
+                      {language === "bn" ? "৬৪" : "64"}
                     </motion.div>
-                    <div className="text-sm">জেলা</div>
+                    <div className="text-sm">{language === "bn" ? "জেলা" : "Districts"}</div>
                   </div>
                 </motion.div>
               </motion.div>
 
               {/* Floating City Markers */}
-              {[
-                { city: "ঢাকা", position: "top-8 left-1/4", delay: 0 },
-                { city: "চট্টগ্রাম", position: "top-1/4 right-8", delay: 1 },
-                { city: "সিলেট", position: "bottom-1/4 left-8", delay: 2 },
-                { city: "খুলনা", position: "bottom-8 right-1/4", delay: 1.5 },
-              ].map((item, i) => (
+              {floatingCities.map((item, i) => (
                 <motion.div 
                   key={item.city}
                   className={`absolute ${item.position} bg-card shadow-card px-3 py-2 rounded-lg border border-border/50`}

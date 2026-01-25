@@ -2,15 +2,18 @@ import { Truck, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   const navLinks = [
-    { label: "সেবাসমূহ", href: "#services" },
-    { label: "কিভাবে কাজ করে", href: "#how-it-works" },
-    { label: "যানবাহন", href: "#vehicles" },
-    { label: "যোগাযোগ", href: "#contact" },
+    { label: t("nav.services"), href: "#services" },
+    { label: t("nav.howItWorks"), href: "#how-it-works" },
+    { label: t("nav.vehicles"), href: "#vehicles" },
+    { label: t("nav.contact"), href: "#contact" },
   ];
 
   return (
@@ -61,17 +64,21 @@ const Header = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4, duration: 0.4 }}
         >
-          <Button variant="secondary">বুকিং করুন</Button>
+          <LanguageSwitcher />
+          <Button variant="secondary">{t("nav.booking")}</Button>
         </motion.div>
 
         {/* Mobile Menu Button */}
-        <motion.button
-          className="md:hidden p-2 text-foreground"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          whileTap={{ scale: 0.9 }}
-        >
-          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </motion.button>
+        <div className="md:hidden flex items-center gap-2">
+          <LanguageSwitcher />
+          <motion.button
+            className="p-2 text-foreground"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            whileTap={{ scale: 0.9 }}
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </motion.button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -99,7 +106,7 @@ const Header = () => {
                 </motion.a>
               ))}
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                <Button variant="secondary" className="w-full">বুকিং করুন</Button>
+                <Button variant="secondary" className="w-full">{t("nav.booking")}</Button>
               </div>
             </nav>
           </motion.div>

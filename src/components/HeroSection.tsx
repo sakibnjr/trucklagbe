@@ -19,12 +19,14 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import heroBg from "@/assets/hero-bg.jpg";
 
 type VehicleType = 'truck' | 'pickup' | 'pickup-van' | 'private-car' | 'hiace';
 
 const HeroSection = () => {
   const { toast } = useToast();
+  const { t, language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Form state
@@ -37,41 +39,77 @@ const HeroSection = () => {
   const [pickupTime, setPickupTime] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
 
-  const vehicleTypes = [
-    { value: "truck" as VehicleType, label: "ট্রাক" },
-    { value: "pickup" as VehicleType, label: "পিকআপ" },
-    { value: "pickup-van" as VehicleType, label: "পিকআপ ভ্যান" },
-    { value: "private-car" as VehicleType, label: "প্রাইভেট কার" },
-    { value: "hiace" as VehicleType, label: "হায়েস" },
-  ];
+  const vehicleTypes = language === "bn" 
+    ? [
+        { value: "truck" as VehicleType, label: "ট্রাক" },
+        { value: "pickup" as VehicleType, label: "পিকআপ" },
+        { value: "pickup-van" as VehicleType, label: "পিকআপ ভ্যান" },
+        { value: "private-car" as VehicleType, label: "প্রাইভেট কার" },
+        { value: "hiace" as VehicleType, label: "হায়েস" },
+      ]
+    : [
+        { value: "truck" as VehicleType, label: "Truck" },
+        { value: "pickup" as VehicleType, label: "Pickup" },
+        { value: "pickup-van" as VehicleType, label: "Pickup Van" },
+        { value: "private-car" as VehicleType, label: "Private Car" },
+        { value: "hiace" as VehicleType, label: "Hiace" },
+      ];
 
-  const timeSlots = [
-    { value: "06:00", label: "সকাল ৬:০০" },
-    { value: "07:00", label: "সকাল ৭:০০" },
-    { value: "08:00", label: "সকাল ৮:০০" },
-    { value: "09:00", label: "সকাল ৯:০০" },
-    { value: "10:00", label: "সকাল ১০:০০" },
-    { value: "11:00", label: "সকাল ১১:০০" },
-    { value: "12:00", label: "দুপুর ১২:০০" },
-    { value: "13:00", label: "দুপুর ১:০০" },
-    { value: "14:00", label: "দুপুর ২:০০" },
-    { value: "15:00", label: "বিকাল ৩:০০" },
-    { value: "16:00", label: "বিকাল ৪:০০" },
-    { value: "17:00", label: "বিকাল ৫:০০" },
-    { value: "18:00", label: "সন্ধ্যা ৬:০০" },
-    { value: "19:00", label: "সন্ধ্যা ৭:০০" },
-    { value: "20:00", label: "রাত ৮:০০" },
-    { value: "21:00", label: "রাত ৯:০০" },
-  ];
+  const timeSlots = language === "bn"
+    ? [
+        { value: "06:00", label: "সকাল ৬:০০" },
+        { value: "07:00", label: "সকাল ৭:০০" },
+        { value: "08:00", label: "সকাল ৮:০০" },
+        { value: "09:00", label: "সকাল ৯:০০" },
+        { value: "10:00", label: "সকাল ১০:০০" },
+        { value: "11:00", label: "সকাল ১১:০০" },
+        { value: "12:00", label: "দুপুর ১২:০০" },
+        { value: "13:00", label: "দুপুর ১:০০" },
+        { value: "14:00", label: "দুপুর ২:০০" },
+        { value: "15:00", label: "বিকাল ৩:০০" },
+        { value: "16:00", label: "বিকাল ৪:০০" },
+        { value: "17:00", label: "বিকাল ৫:০০" },
+        { value: "18:00", label: "সন্ধ্যা ৬:০০" },
+        { value: "19:00", label: "সন্ধ্যা ৭:০০" },
+        { value: "20:00", label: "রাত ৮:০০" },
+        { value: "21:00", label: "রাত ৯:০০" },
+      ]
+    : [
+        { value: "06:00", label: "6:00 AM" },
+        { value: "07:00", label: "7:00 AM" },
+        { value: "08:00", label: "8:00 AM" },
+        { value: "09:00", label: "9:00 AM" },
+        { value: "10:00", label: "10:00 AM" },
+        { value: "11:00", label: "11:00 AM" },
+        { value: "12:00", label: "12:00 PM" },
+        { value: "13:00", label: "1:00 PM" },
+        { value: "14:00", label: "2:00 PM" },
+        { value: "15:00", label: "3:00 PM" },
+        { value: "16:00", label: "4:00 PM" },
+        { value: "17:00", label: "5:00 PM" },
+        { value: "18:00", label: "6:00 PM" },
+        { value: "19:00", label: "7:00 PM" },
+        { value: "20:00", label: "8:00 PM" },
+        { value: "21:00", label: "9:00 PM" },
+      ];
 
-  const durationOptions = [
-    { value: "1", label: "১ দিন" },
-    { value: "2", label: "২ দিন" },
-    { value: "3", label: "৩ দিন" },
-    { value: "7", label: "১ সপ্তাহ" },
-    { value: "15", label: "১৫ দিন" },
-    { value: "30", label: "১ মাস" },
-  ];
+  const durationOptions = language === "bn"
+    ? [
+        { value: "1", label: "১ দিন" },
+        { value: "2", label: "২ দিন" },
+        { value: "3", label: "৩ দিন" },
+        { value: "7", label: "১ সপ্তাহ" },
+        { value: "15", label: "১৫ দিন" },
+        { value: "30", label: "১ মাস" },
+      ]
+    : [
+        { value: "1", label: "1 Day" },
+        { value: "2", label: "2 Days" },
+        { value: "3", label: "3 Days" },
+        { value: "7", label: "1 Week" },
+        { value: "15", label: "15 Days" },
+        { value: "30", label: "1 Month" },
+      ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -102,13 +140,17 @@ const HeroSection = () => {
     },
   };
 
-  // Format date in Bengali
-  const formatDateBengali = (date: Date) => {
-    const day = date.getDate().toLocaleString('bn-BD');
-    const months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear().toLocaleString('bn-BD').replace(/,/g, '');
-    return `${day} ${month}, ${year}`;
+  // Format date based on language
+  const formatDate = (date: Date) => {
+    if (language === "bn") {
+      const day = date.getDate().toLocaleString('bn-BD');
+      const months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+      const month = months[date.getMonth()];
+      const year = date.getFullYear().toLocaleString('bn-BD').replace(/,/g, '');
+      return `${day} ${month}, ${year}`;
+    } else {
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -116,35 +158,35 @@ const HeroSection = () => {
     
     // Validation
     if (!customerName.trim()) {
-      toast({ title: "ত্রুটি", description: "আপনার নাম লিখুন", variant: "destructive" });
+      toast({ title: t("form.error"), description: t("form.validation.name"), variant: "destructive" });
       return;
     }
     if (!customerPhone.trim() || customerPhone.length < 11) {
-      toast({ title: "ত্রুটি", description: "সঠিক মোবাইল নম্বর লিখুন", variant: "destructive" });
+      toast({ title: t("form.error"), description: t("form.validation.phone"), variant: "destructive" });
       return;
     }
     if (!vehicleType) {
-      toast({ title: "ত্রুটি", description: "যানবাহন নির্বাচন করুন", variant: "destructive" });
+      toast({ title: t("form.error"), description: t("form.validation.vehicle"), variant: "destructive" });
       return;
     }
     if (!pickupLocation.trim()) {
-      toast({ title: "ত্রুটি", description: "পিকআপ পয়েন্ট লিখুন", variant: "destructive" });
+      toast({ title: t("form.error"), description: t("form.validation.pickup"), variant: "destructive" });
       return;
     }
     if (!deliveryLocation.trim()) {
-      toast({ title: "ত্রুটি", description: "ডেলিভারি পয়েন্ট লিখুন", variant: "destructive" });
+      toast({ title: t("form.error"), description: t("form.validation.delivery"), variant: "destructive" });
       return;
     }
     if (!pickupDate) {
-      toast({ title: "ত্রুটি", description: "তারিখ নির্বাচন করুন", variant: "destructive" });
+      toast({ title: t("form.error"), description: t("form.validation.date"), variant: "destructive" });
       return;
     }
     if (!pickupTime) {
-      toast({ title: "ত্রুটি", description: "সময় নির্বাচন করুন", variant: "destructive" });
+      toast({ title: t("form.error"), description: t("form.validation.time"), variant: "destructive" });
       return;
     }
     if (!duration) {
-      toast({ title: "ত্রুটি", description: "সময়কাল নির্বাচন করুন", variant: "destructive" });
+      toast({ title: t("form.error"), description: t("form.validation.duration"), variant: "destructive" });
       return;
     }
 
@@ -165,8 +207,8 @@ const HeroSection = () => {
       if (error) throw error;
 
       toast({
-        title: "সফল! ✅",
-        description: "আপনার বুকিং সফলভাবে সম্পন্ন হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।",
+        title: t("form.success"),
+        description: t("form.successMsg"),
       });
 
       // Reset form
@@ -182,14 +224,26 @@ const HeroSection = () => {
     } catch (error) {
       console.error('Booking error:', error);
       toast({
-        title: "ত্রুটি",
-        description: "বুকিং করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+        title: t("form.error"),
+        description: t("form.errorMsg"),
         variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const stats = language === "bn"
+    ? [
+        { value: "১০,০০০+", label: t("hero.stats.customers") },
+        { value: "৫০০+", label: t("hero.stats.vehicles") },
+        { value: "৬৪", label: t("hero.stats.districts") },
+      ]
+    : [
+        { value: "10,000+", label: t("hero.stats.customers") },
+        { value: "500+", label: t("hero.stats.vehicles") },
+        { value: "64", label: t("hero.stats.districts") },
+      ];
 
   return (
     <section className="relative min-h-screen overflow-hidden">
@@ -253,14 +307,14 @@ const HeroSection = () => {
                 animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
-              <span className="text-sm font-medium">বাংলাদেশের সবচেয়ে বিশ্বস্ত ট্রান্সপোর্ট সার্ভিস</span>
+              <span className="text-sm font-medium">{t("hero.badge")}</span>
             </motion.div>
             
             <motion.h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
               variants={itemVariants}
             >
-              যেকোনো জায়গায়<br />
+              {t("hero.tagline1")}<br />
               <motion.span 
                 className="text-secondary inline-block"
                 animate={{ 
@@ -268,16 +322,16 @@ const HeroSection = () => {
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                ট্রাক বা গাড়ি
+                {t("hero.tagline2")}
               </motion.span><br />
-              ভাড়া নিন সহজে
+              {t("hero.tagline3")}
             </motion.h1>
             
             <motion.p 
               className="text-lg md:text-xl text-primary-foreground/80 max-w-xl"
               variants={itemVariants}
             >
-              ট্রাক, পিকআপ, প্রাইভেট কার বা হায়েস - যা প্রয়োজন তা বুক করুন মিনিটের মধ্যে। সারাদেশে দ্রুত ও নিরাপদ পরিবহন সেবা।
+              {t("hero.description")}
             </motion.p>
 
             <motion.div 
@@ -286,13 +340,13 @@ const HeroSection = () => {
             >
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button size="lg" variant="hero" className="group">
-                  এখনই বুক করুন
+                  {t("hero.bookNow")}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button size="lg" variant="hero-outline">
-                  আমাদের সম্পর্কে
+                  {t("hero.aboutUs")}
                 </Button>
               </motion.div>
             </motion.div>
@@ -302,11 +356,7 @@ const HeroSection = () => {
               className="flex flex-wrap gap-8 pt-8 border-t border-primary-foreground/20"
               variants={itemVariants}
             >
-              {[
-                { value: "১০,০০০+", label: "সন্তুষ্ট গ্রাহক" },
-                { value: "৫০০+", label: "যানবাহন" },
-                { value: "৬৪", label: "জেলায় সেবা" },
-              ].map((stat, index) => (
+              {stats.map((stat, index) => (
                 <motion.div 
                   key={stat.label}
                   variants={statVariants}
@@ -334,7 +384,7 @@ const HeroSection = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
             >
-              এখনই বুকিং করুন
+              {t("form.title")}
             </motion.h2>
             
             <form className="space-y-4" onSubmit={handleSubmit}>
@@ -348,10 +398,10 @@ const HeroSection = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground flex items-center gap-2">
                     <User className="w-4 h-4 text-secondary" />
-                    আপনার নাম
+                    {t("form.name")}
                   </label>
                   <Input 
-                    placeholder="নাম লিখুন" 
+                    placeholder={t("form.namePlaceholder")}
                     className="h-12" 
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
@@ -360,7 +410,7 @@ const HeroSection = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground flex items-center gap-2">
                     <Phone className="w-4 h-4 text-secondary" />
-                    মোবাইল নম্বর
+                    {t("form.phone")}
                   </label>
                   <Input 
                     placeholder="01XXXXXXXXX" 
@@ -380,11 +430,11 @@ const HeroSection = () => {
               >
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
                   <Truck className="w-4 h-4 text-secondary" />
-                  যানবাহনের ধরন
+                  {t("form.vehicleType")}
                 </label>
                 <Select value={vehicleType} onValueChange={(value: VehicleType) => setVehicleType(value)}>
                   <SelectTrigger className="h-12">
-                    <SelectValue placeholder="যানবাহন নির্বাচন করুন" />
+                    <SelectValue placeholder={t("form.vehiclePlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
                     {vehicleTypes.map((type) => (
@@ -405,10 +455,10 @@ const HeroSection = () => {
               >
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-secondary" />
-                  পিকআপ পয়েন্ট
+                  {t("form.pickup")}
                 </label>
                 <Input 
-                  placeholder="কোথা থেকে তুলবেন?" 
+                  placeholder={t("form.pickupPlaceholder")}
                   className="h-12" 
                   value={pickupLocation}
                   onChange={(e) => setPickupLocation(e.target.value)}
@@ -424,10 +474,10 @@ const HeroSection = () => {
               >
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-primary" />
-                  ডেলিভারি পয়েন্ট
+                  {t("form.delivery")}
                 </label>
                 <Input 
-                  placeholder="কোথায় পৌঁছাবেন?" 
+                  placeholder={t("form.deliveryPlaceholder")}
                   className="h-12" 
                   value={deliveryLocation}
                   onChange={(e) => setDeliveryLocation(e.target.value)}
@@ -445,7 +495,7 @@ const HeroSection = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground flex items-center gap-2">
                     <CalendarIcon className="w-4 h-4 text-secondary" />
-                    তারিখ
+                    {t("form.date")}
                   </label>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -457,7 +507,7 @@ const HeroSection = () => {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {pickupDate ? formatDateBengali(pickupDate) : "তারিখ নির্বাচন"}
+                        {pickupDate ? formatDate(pickupDate) : t("form.datePlaceholder")}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -477,11 +527,11 @@ const HeroSection = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground flex items-center gap-2">
                     <Clock className="w-4 h-4 text-secondary" />
-                    সময়
+                    {t("form.time")}
                   </label>
                   <Select value={pickupTime} onValueChange={setPickupTime}>
                     <SelectTrigger className="h-12">
-                      <SelectValue placeholder="সময় নির্বাচন" />
+                      <SelectValue placeholder={t("form.timePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
                       {timeSlots.map((slot) => (
@@ -503,11 +553,11 @@ const HeroSection = () => {
               >
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-secondary" />
-                  কতদিনের জন্য
+                  {t("form.duration")}
                 </label>
                 <Select value={duration} onValueChange={setDuration}>
                   <SelectTrigger className="h-12">
-                    <SelectValue placeholder="সময়কাল নির্বাচন করুন" />
+                    <SelectValue placeholder={t("form.durationPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
                     {durationOptions.map((option) => (
@@ -533,7 +583,7 @@ const HeroSection = () => {
                   className="w-full group"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "বুকিং হচ্ছে..." : "বুকিং করুন"}
+                  {isSubmitting ? t("form.submitting") : t("form.submit")}
                   {!isSubmitting && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
                 </Button>
               </motion.div>

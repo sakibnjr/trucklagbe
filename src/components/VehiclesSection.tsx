@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Import vehicle images
 import truckImage from "@/assets/vehicles/truck.jpg";
@@ -10,52 +11,72 @@ import pickupVanImage from "@/assets/vehicles/pickup-van.jpg";
 import privateCarImage from "@/assets/vehicles/private-car.jpg";
 import hiaceImage from "@/assets/vehicles/hiace.jpg";
 
-const vehicles = [
-  {
-    id: "truck",
-    name: "ট্রাক",
-    description: "ভারী মালামাল পরিবহনের জন্য আদর্শ। বড় আকারের সব ধরনের পণ্য বহনে সক্ষম।",
-    capacity: "৫-১০ টন",
-    image: truckImage,
-    features: ["বড় মালামাল", "ফার্নিচার", "নির্মাণ সামগ্রী"],
-  },
-  {
-    id: "pickup",
-    name: "পিকআপ",
-    description: "মাঝারি আকারের মালামাল পরিবহনে সুবিধাজনক এবং দ্রুত।",
-    capacity: "১-২ টন",
-    image: pickupImage,
-    features: ["ছোট মালামাল", "বাসা বদল", "অফিস সামগ্রী"],
-  },
-  {
-    id: "pickup-van",
-    name: "পিকআপ ভ্যান",
-    description: "কভার্ড ভ্যান - বৃষ্টি বা রোদে আপনার মালামাল সুরক্ষিত।",
-    capacity: "১-১.৫ টন",
-    image: pickupVanImage,
-    features: ["ইলেকট্রনিক্স", "সংবেদনশীল পণ্য", "খাদ্যদ্রব্য"],
-  },
-  {
-    id: "private-car",
-    name: "প্রাইভেট কার",
-    description: "আরামদায়ক ব্যক্তিগত ভ্রমণের জন্য এসি গাড়ি।",
-    capacity: "৪-৫ জন",
-    image: privateCarImage,
-    features: ["শহরের ভেতরে", "এয়ারপোর্ট পিক", "ট্যুর"],
-  },
-  {
-    id: "hiace",
-    name: "হায়েস",
-    description: "দলগত ভ্রমণ বা বেশি যাত্রী বহনে আদর্শ মাইক্রোবাস।",
-    capacity: "১০-১৫ জন",
-    image: hiaceImage,
-    features: ["গ্রুপ ট্রাভেল", "বিয়ে বাড়ি", "পিকনিক"],
-  },
-];
+interface VehicleData {
+  id: string;
+  nameKey: string;
+  descKey: string;
+  capacityKey: string;
+  image: string;
+  featuresKeys: string[];
+}
 
 const VehiclesSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { t, language } = useLanguage();
+
+  const vehicles: VehicleData[] = [
+    {
+      id: "truck",
+      nameKey: "vehicles.truck",
+      descKey: "vehicles.truck.desc",
+      capacityKey: "vehicles.truck.capacity",
+      image: truckImage,
+      featuresKeys: language === "bn" 
+        ? ["বড় মালামাল", "ফার্নিচার", "নির্মাণ সামগ্রী"]
+        : ["Large cargo", "Furniture", "Construction materials"],
+    },
+    {
+      id: "pickup",
+      nameKey: "vehicles.pickup",
+      descKey: "vehicles.pickup.desc",
+      capacityKey: "vehicles.pickup.capacity",
+      image: pickupImage,
+      featuresKeys: language === "bn"
+        ? ["ছোট মালামাল", "বাসা বদল", "অফিস সামগ্রী"]
+        : ["Small cargo", "House shifting", "Office goods"],
+    },
+    {
+      id: "pickup-van",
+      nameKey: "vehicles.pickupVan",
+      descKey: "vehicles.pickupVan.desc",
+      capacityKey: "vehicles.pickupVan.capacity",
+      image: pickupVanImage,
+      featuresKeys: language === "bn"
+        ? ["ইলেকট্রনিক্স", "সংবেদনশীল পণ্য", "খাদ্যদ্রব্য"]
+        : ["Electronics", "Sensitive goods", "Food items"],
+    },
+    {
+      id: "private-car",
+      nameKey: "vehicles.privateCar",
+      descKey: "vehicles.privateCar.desc",
+      capacityKey: "vehicles.privateCar.capacity",
+      image: privateCarImage,
+      featuresKeys: language === "bn"
+        ? ["শহরের ভেতরে", "এয়ারপোর্ট পিক", "ট্যুর"]
+        : ["City travel", "Airport pickup", "Tours"],
+    },
+    {
+      id: "hiace",
+      nameKey: "vehicles.hiace",
+      descKey: "vehicles.hiace.desc",
+      capacityKey: "vehicles.hiace.capacity",
+      image: hiaceImage,
+      featuresKeys: language === "bn"
+        ? ["গ্রুপ ট্রাভেল", "বিয়ে বাড়ি", "পিকনিক"]
+        : ["Group travel", "Wedding", "Picnic"],
+    },
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -94,7 +115,7 @@ const VehiclesSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.2 }}
           >
-            আমাদের যানবাহন
+            {t("vehicles.subtitle")}
           </motion.span>
           <motion.h2 
             className="text-3xl md:text-4xl font-bold text-foreground mt-3 mb-4"
@@ -102,7 +123,7 @@ const VehiclesSection = () => {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            আপনার প্রয়োজন অনুযায়ী বেছে নিন
+            {t("vehicles.title")}
           </motion.h2>
           <motion.p 
             className="text-muted-foreground text-lg"
@@ -110,7 +131,7 @@ const VehiclesSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.4 }}
           >
-            ট্রাক থেকে প্রাইভেট কার - সব ধরনের যানবাহন এক জায়গায়
+            {t("vehicles.description")}
           </motion.p>
         </motion.div>
 
@@ -136,7 +157,7 @@ const VehiclesSection = () => {
               <div className="relative h-48 overflow-hidden">
                 <img 
                   src={vehicle.image} 
-                  alt={vehicle.name}
+                  alt={t(vehicle.nameKey)}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
@@ -146,22 +167,22 @@ const VehiclesSection = () => {
                   className="absolute top-4 right-4 bg-secondary text-secondary-foreground px-3 py-1.5 rounded-full text-sm font-bold shadow-lg"
                   whileHover={{ scale: 1.05 }}
                 >
-                  {vehicle.capacity}
+                  {t(vehicle.capacityKey)}
                 </motion.div>
               </div>
 
               {/* Content */}
               <div className="p-6">
                 <h3 className="text-xl font-bold text-foreground mb-2">
-                  {vehicle.name}
+                  {t(vehicle.nameKey)}
                 </h3>
                 <p className="text-muted-foreground text-sm mb-4">
-                  {vehicle.description}
+                  {t(vehicle.descKey)}
                 </p>
 
                 {/* Features */}
                 <div className="flex flex-wrap gap-2 mb-5">
-                  {vehicle.features.map((feature, i) => (
+                  {vehicle.featuresKeys.map((feature, i) => (
                     <motion.span
                       key={feature}
                       className="bg-muted text-muted-foreground px-3 py-1 rounded-full text-xs"
@@ -180,7 +201,7 @@ const VehiclesSection = () => {
                   whileTap={{ scale: 0.98 }}
                 >
                   <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                    বুক করুন
+                    {t("vehicles.select")}
                   </Button>
                 </motion.div>
               </div>
