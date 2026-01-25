@@ -193,27 +193,27 @@ const AdminManagement = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-card rounded-xl border p-6"
+      className="bg-card rounded-lg md:rounded-xl border p-4 md:p-6"
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 p-2 rounded-lg">
             <Users className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-foreground">অ্যাডমিন ম্যানেজমেন্ট</h2>
-            <p className="text-sm text-muted-foreground">অ্যাডমিন এবং স্টাফ যোগ করুন</p>
+            <h2 className="text-base md:text-lg font-semibold text-foreground">অ্যাডমিন ম্যানেজমেন্ট</h2>
+            <p className="text-xs md:text-sm text-muted-foreground">অ্যাডমিন এবং স্টাফ যোগ করুন</p>
           </div>
         </div>
 
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button size="sm" className="w-full sm:w-auto">
               <UserPlus className="w-4 h-4 mr-2" />
               নতুন যোগ করুন
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="mx-4 sm:mx-auto max-w-md">
             <DialogHeader>
               <DialogTitle>নতুন অ্যাডমিন/স্টাফ যোগ করুন</DialogTitle>
               <DialogDescription>
@@ -252,11 +252,11 @@ const AdminManagement = () => {
                 </Select>
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
+              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="w-full sm:w-auto">
                 বাতিল
               </Button>
-              <Button onClick={handleAddAdmin} disabled={isAdding}>
+              <Button onClick={handleAddAdmin} disabled={isAdding} className="w-full sm:w-auto">
                 {isAdding ? "যোগ হচ্ছে..." : "যোগ করুন"}
               </Button>
             </DialogFooter>
@@ -271,58 +271,108 @@ const AdminManagement = () => {
           কোনো অ্যাডমিন/স্টাফ নেই
         </div>
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>ইউজার ID</TableHead>
-              <TableHead>রোল</TableHead>
-              <TableHead>যোগ করা হয়েছে</TableHead>
-              <TableHead className="text-right">অ্যাকশন</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+        <>
+          {/* Desktop Table */}
+          <div className="hidden md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ইউজার ID</TableHead>
+                  <TableHead>রোল</TableHead>
+                  <TableHead>যোগ করা হয়েছে</TableHead>
+                  <TableHead className="text-right">অ্যাকশন</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {userRoles.map((userRole) => (
+                  <TableRow key={userRole.id}>
+                    <TableCell className="font-mono text-sm">
+                      {userRole.user_id.slice(0, 8)}...
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={userRole.role === 'admin' ? 'default' : 'secondary'}>
+                        <Shield className="w-3 h-3 mr-1" />
+                        {userRole.role === 'admin' ? 'অ্যাডমিন' : 'স্টাফ'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(userRole.created_at).toLocaleDateString('bn-BD')}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Select
+                          value={userRole.role}
+                          onValueChange={(value: AppRole) => updateUserRole(userRole, value)}
+                        >
+                          <SelectTrigger className="w-28 h-8">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="admin">অ্যাডমিন</SelectItem>
+                            <SelectItem value="staff">স্টাফ</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:text-destructive"
+                          onClick={() => handleDeleteUser(userRole)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden divide-y divide-border">
             {userRoles.map((userRole) => (
-              <TableRow key={userRole.id}>
-                <TableCell className="font-mono text-sm">
-                  {userRole.user_id.slice(0, 8)}...
-                </TableCell>
-                <TableCell>
+              <div key={userRole.id} className="py-4 first:pt-0 last:pb-0 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="font-mono text-sm text-foreground">
+                      {userRole.user_id.slice(0, 12)}...
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      যোগ করা হয়েছে: {new Date(userRole.created_at).toLocaleDateString('bn-BD')}
+                    </div>
+                  </div>
                   <Badge variant={userRole.role === 'admin' ? 'default' : 'secondary'}>
                     <Shield className="w-3 h-3 mr-1" />
                     {userRole.role === 'admin' ? 'অ্যাডমিন' : 'স্টাফ'}
                   </Badge>
-                </TableCell>
-                <TableCell>
-                  {new Date(userRole.created_at).toLocaleDateString('bn-BD')}
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <Select
-                      value={userRole.role}
-                      onValueChange={(value: AppRole) => updateUserRole(userRole, value)}
-                    >
-                      <SelectTrigger className="w-28 h-8">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="admin">অ্যাডমিন</SelectItem>
-                        <SelectItem value="staff">স্টাফ</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-destructive hover:text-destructive"
-                      onClick={() => handleDeleteUser(userRole)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Select
+                    value={userRole.role}
+                    onValueChange={(value: AppRole) => updateUserRole(userRole, value)}
+                  >
+                    <SelectTrigger className="flex-1 h-9 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="admin">অ্যাডমিন</SelectItem>
+                      <SelectItem value="staff">স্টাফ</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="text-destructive hover:text-destructive shrink-0"
+                    onClick={() => handleDeleteUser(userRole)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
             ))}
-          </TableBody>
-        </Table>
+          </div>
+        </>
       )}
     </motion.div>
   );
