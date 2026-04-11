@@ -1,5 +1,6 @@
 import { Truck, Phone, Mail, MapPin, Facebook, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer = () => {
@@ -22,12 +23,14 @@ const Footer = () => {
     visible: { opacity: 1, y: 0 },
   };
 
-  const quickLinks = [
-    { labelKey: "nav.services", href: "#services" },
-    { labelKey: "nav.vehicles", href: "#vehicles" },
-    { labelKey: "nav.howItWorks", href: "#how-it-works" },
-    { labelKey: "footer.aboutUs", href: "#" },
-    { labelKey: "footer.terms", href: "#" },
+  const quickLinks: { labelKey: string; to: string }[] = [
+    { labelKey: "footer.home", to: "/" },
+    { labelKey: "nav.services", to: "/services" },
+    { labelKey: "nav.vehicles", to: "/#vehicles" },
+    { labelKey: "nav.howItWorks", to: "/#how-it-works" },
+    { labelKey: "footer.aboutUs", to: "/about" },
+    { labelKey: "nav.contactUs", to: "/contact" },
+    { labelKey: "footer.terms", to: "#" },
   ];
 
   const vehicles = language === "bn"
@@ -46,10 +49,10 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <motion.div variants={itemVariants}>
-            <motion.a 
-              href="#" 
-              className="flex items-center gap-2 mb-6"
+            <Link to="/" className="flex items-center gap-2 mb-6" onClick={(e) => e.currentTarget.blur()}>
+            <motion.div
               whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2"
             >
               <div className="w-10 h-10 rounded-xl accent-gradient flex items-center justify-center">
                 <Truck className="w-6 h-6 text-accent-foreground" />
@@ -57,7 +60,8 @@ const Footer = () => {
               <span className="text-xl font-bold text-primary-foreground">
                 আমার<span className="text-secondary">ট্রাক</span>
               </span>
-            </motion.a>
+            </motion.div>
+            </Link>
             <p className="text-primary-foreground/60 mb-6">
               {t("footer.description")}
             </p>
@@ -86,9 +90,9 @@ const Footer = () => {
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <a href={link.href} className="hover:text-secondary transition-colors inline-block">
+                  <Link to={link.to} className="hover:text-secondary transition-colors inline-block">
                     {t(link.labelKey)}
-                  </a>
+                  </Link>
                 </motion.li>
               ))}
             </ul>
@@ -104,9 +108,9 @@ const Footer = () => {
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <a href="#" className="hover:text-secondary transition-colors inline-block">
+                  <Link to="/#vehicles" className="hover:text-secondary transition-colors inline-block">
                     {vehicle}
-                  </a>
+                  </Link>
                 </motion.li>
               ))}
             </ul>
