@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Truck, ArrowRight, Clock, CalendarIcon, User, Phone } from "lucide-react";
+import { MapPin, Calendar, Truck, ArrowRight, Clock, CalendarIcon, User, Phone, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -46,6 +46,7 @@ const HeroSection = () => {
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [pickupDate, setPickupDate] = useState<Date>();
   const [pickupTime, setPickupTime] = useState<string>("");
+  const [vehicleSize, setVehicleSize] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
 
   // Update vehicle type when selected from vehicles section
