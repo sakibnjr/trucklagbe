@@ -107,7 +107,7 @@ const bnTranslations: Record<string, string> = {
   
   // Features Section
   "features.subtitle": "কেন আমরা সেরা",
-  "features.title": "ট্রাকলাগবে কেন বেছে নেবেন?",
+  "features.title": "আমারট্রাক কেন বেছে নেবেন?",
   "features.description": "আপনার পরিবহন অভিজ্ঞতাকে সহজ ও আনন্দদায়ক করতে আমরা প্রতিশ্রুতিবদ্ধ",
   "features.safety.title": "নিরাপদ পরিবহন",
   "features.safety.desc": "অভিজ্ঞ ড্রাইভার ও বীমাকৃত যানবাহনে আপনার মালামাল সম্পূর্ণ নিরাপদ।",
@@ -129,7 +129,7 @@ const bnTranslations: Record<string, string> = {
   
   // CTA Section
   "cta.title": "এখনই শুরু করুন!",
-  "cta.description": "পরিবহনের ঝামেলা থেকে মুক্তি পান। এখনই ট্রাকলাগবে-তে বুকিং দিন অথবা সরাসরি কল করুন।",
+  "cta.description": "পরিবহনের ঝামেলা থেকে মুক্তি পান। এখনই আমারট্রাক-এ বুকিং দিন অথবা সরাসরি কল করুন।",
   "cta.booking": "বুকিং করুন",
   
   // Footer
@@ -241,7 +241,7 @@ const enTranslations: Record<string, string> = {
   
   // Features Section
   "features.subtitle": "Why We're the Best",
-  "features.title": "Why Choose TruckLagbe?",
+  "features.title": "Why Choose AmarTruck?",
   "features.description": "We are committed to making your transportation experience easy and enjoyable",
   "features.safety.title": "Safe Transport",
   "features.safety.desc": "Your goods are completely safe with experienced drivers and insured vehicles.",
@@ -263,7 +263,7 @@ const enTranslations: Record<string, string> = {
   
   // CTA Section
   "cta.title": "Get Started Now!",
-  "cta.description": "Get rid of transportation hassles. Book now on TruckLagbe or call us directly.",
+  "cta.description": "Get rid of transportation hassles. Book now on AmarTruck or call us directly.",
   "cta.booking": "Book Now",
   
   // Footer

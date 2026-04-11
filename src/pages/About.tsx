@@ -83,8 +83,8 @@ const About = () => {
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto">
               {language === "bn" 
-                ? "বাংলাদেশের সবচেয়ে বিশ্বস্ত ট্রান্সপোর্ট সার্ভিস - ট্রাকলাগবে আপনার পরিবহন সমস্যার সমাধান।"
-                : "TruckLagbe - Bangladesh's most trusted transport service, solving all your transportation needs."
+                ? "বাংলাদেশের সবচেয়ে বিশ্বস্ত ট্রান্সপোর্ট সার্ভিস - আমারট্রাক আপনার পরিবহন সমস্যার সমাধান।"
+                : "AmarTruck - Bangladesh's most trusted transport service, solving all your transportation needs."
               }
             </p>
           </motion.div>
@@ -114,8 +114,8 @@ const About = () => {
               <div className="space-y-4 text-muted-foreground">
                 <p>
                   {language === "bn"
-                    ? "ট্রাকলাগবে শুরু হয়েছিল একটি সহজ লক্ষ্য নিয়ে - বাংলাদেশের মানুষদের জন্য পরিবহন সেবাকে সহজ ও নির্ভরযোগ্য করা। আমরা বুঝতে পেরেছিলাম যে মালামাল পরিবহন করতে গিয়ে মানুষ কত সমস্যার সম্মুখীন হয়।"
-                    : "TruckLagbe started with a simple goal - to make transportation services easy and reliable for the people of Bangladesh. We understood the challenges people face when transporting their goods."
+                    ? "আমারট্রাক শুরু হয়েছিল একটি সহজ লক্ষ্য নিয়ে - বাংলাদেশের মানুষদের জন্য পরিবহন সেবাকে সহজ ও নির্ভরযোগ্য করা। আমরা বুঝতে পেরেছিলাম যে মালামাল পরিবহন করতে গিয়ে মানুষ কত সমস্যার সম্মুখীন হয়।"
+                    : "AmarTruck started with a simple goal - to make transportation services easy and reliable for the people of Bangladesh. We understood the challenges people face when transporting their goods."
                   }
                 </p>
                 <p>
