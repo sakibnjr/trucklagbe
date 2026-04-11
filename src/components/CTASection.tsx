@@ -103,15 +103,17 @@ const CTASection = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button size="lg" variant="hero-outline" className="gap-2 group">
-              <motion.div
-                animate={{ rotate: [0, 15, -15, 0] }}
-                transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
-              >
-                <Phone className="w-5 h-5" />
-              </motion.div>
-              <span>০১৭XX-XXXXXX</span>
-            </Button>
+            <a href="tel:+8801978832209">
+              <Button size="lg" variant="hero-outline" className="gap-2 group">
+                <motion.div
+                  animate={{ rotate: [0, 15, -15, 0] }}
+                  transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                >
+                  <Phone className="w-5 h-5" />
+                </motion.div>
+                <span>০১৯৭৮-৮৩২২০৯</span>
+              </Button>
+            </a>
           </motion.div>
         </motion.div>
       </div>
