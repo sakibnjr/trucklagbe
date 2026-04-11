@@ -110,6 +110,26 @@ const HeroSection = () => {
         { value: "21:00", label: "9:00 PM" },
       ];
 
+  const vehicleSizeOptions = language === "bn"
+    ? [
+        { value: "7", label: "৭ ফুট" },
+        { value: "9", label: "৯ ফুট" },
+        { value: "12", label: "১২ ফুট" },
+        { value: "14", label: "১৪ ফুট" },
+        { value: "16", label: "১৬ ফুট" },
+        { value: "18", label: "১৮ ফুট" },
+        { value: "23", label: "২৩ ফুট" },
+      ]
+    : [
+        { value: "7", label: "7 Feet" },
+        { value: "9", label: "9 Feet" },
+        { value: "12", label: "12 Feet" },
+        { value: "14", label: "14 Feet" },
+        { value: "16", label: "16 Feet" },
+        { value: "18", label: "18 Feet" },
+        { value: "23", label: "23 Feet" },
+      ];
+
   const durationOptions = language === "bn"
     ? [
         { value: "1", label: "১ দিন" },
