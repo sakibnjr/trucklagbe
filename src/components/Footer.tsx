@@ -122,8 +122,8 @@ const Footer = () => {
               >
                 <Phone className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
                 <div>
-                  <div>০১৭XX-XXXXXX</div>
-                  <div>০১৮XX-XXXXXX</div>
+                  <a href="tel:+8801978832209" className="hover:text-secondary transition-colors">০১৯৭৮-৮৩২২০৯</a>
+                  <div><a href="https://wa.me/8801608832209" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">০১৬০৮-৮৩২২০৯ (WhatsApp)</a></div>
                 </div>
               </motion.li>
               <motion.li 
