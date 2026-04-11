@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Truck, ArrowRight, Clock, CalendarIcon, User, Phone } from "lucide-react";
+import { MapPin, Calendar, Truck, ArrowRight, Clock, CalendarIcon, User, Phone, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -46,6 +46,7 @@ const HeroSection = () => {
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [pickupDate, setPickupDate] = useState<Date>();
   const [pickupTime, setPickupTime] = useState<string>("");
+  const [vehicleSize, setVehicleSize] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
 
   // Update vehicle type when selected from vehicles section
@@ -107,6 +108,26 @@ const HeroSection = () => {
         { value: "19:00", label: "7:00 PM" },
         { value: "20:00", label: "8:00 PM" },
         { value: "21:00", label: "9:00 PM" },
+      ];
+
+  const vehicleSizeOptions = language === "bn"
+    ? [
+        { value: "7", label: "৭ ফুট" },
+        { value: "9", label: "৯ ফুট" },
+        { value: "12", label: "১২ ফুট" },
+        { value: "14", label: "১৪ ফুট" },
+        { value: "16", label: "১৬ ফুট" },
+        { value: "18", label: "১৮ ফুট" },
+        { value: "23", label: "২৩ ফুট" },
+      ]
+    : [
+        { value: "7", label: "7 Feet" },
+        { value: "9", label: "9 Feet" },
+        { value: "12", label: "12 Feet" },
+        { value: "14", label: "14 Feet" },
+        { value: "16", label: "16 Feet" },
+        { value: "18", label: "18 Feet" },
+        { value: "23", label: "23 Feet" },
       ];
 
   const durationOptions = language === "bn"
@@ -231,6 +252,7 @@ const HeroSection = () => {
       setCustomerName("");
       setCustomerPhone("");
       setVehicleType("");
+      setVehicleSize("");
       setPickupLocation("");
       setDeliveryLocation("");
       setPickupDate(undefined);
@@ -445,29 +467,49 @@ const HeroSection = () => {
                 </div>
               </motion.div>
 
-              {/* Vehicle Type */}
+              {/* Vehicle Type & Size */}
               <motion.div 
-                className="space-y-1.5 md:space-y-2"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.9 }}
               >
-                <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
-                  <Truck className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
-                  {t("form.vehicleType")}
-                </label>
-                <Select value={vehicleType} onValueChange={(value: VehicleType) => setVehicleType(value)}>
-                  <SelectTrigger className="h-10 md:h-12 text-sm">
-                    <SelectValue placeholder={t("form.vehiclePlaceholder")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {vehicleTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <Truck className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
+                    {t("form.vehicleType")}
+                  </label>
+                  <Select value={vehicleType} onValueChange={(value: VehicleType) => setVehicleType(value)}>
+                    <SelectTrigger className="h-10 md:h-12 text-sm">
+                      <SelectValue placeholder={t("form.vehiclePlaceholder")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {vehicleTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <Ruler className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
+                    {t("form.vehicleSize")}
+                  </label>
+                  <Select value={vehicleSize} onValueChange={setVehicleSize}>
+                    <SelectTrigger className="h-10 md:h-12 text-sm">
+                      <SelectValue placeholder={t("form.vehicleSizePlaceholder")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {vehicleSizeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </motion.div>
 
               {/* Pickup & Delivery Locations */}

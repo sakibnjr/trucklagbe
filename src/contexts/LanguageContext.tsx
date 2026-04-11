@@ -16,6 +16,7 @@ const bnTranslations: Record<string, string> = {
   "nav.services": "সেবাসমূহ",
   "nav.howItWorks": "কিভাবে কাজ করে",
   "nav.vehicles": "যানবাহন",
+  "nav.about": "আমাদের সম্পর্কে",
   "nav.contact": "যোগাযোগ",
   "nav.booking": "বুকিং করুন",
   
@@ -51,6 +52,8 @@ const bnTranslations: Record<string, string> = {
   "form.datePlaceholder": "তারিখ নির্বাচন",
   "form.time": "সময়",
   "form.timePlaceholder": "সময় নির্বাচন",
+  "form.vehicleSize": "গাড়ির সাইজ",
+  "form.vehicleSizePlaceholder": "গাড়ির সাইজ নির্বাচন করুন",
   "form.duration": "কতদিনের জন্য",
   "form.durationPlaceholder": "সময়কাল নির্বাচন করুন",
   "form.submit": "বুকিং করুন",
@@ -147,6 +150,7 @@ const enTranslations: Record<string, string> = {
   "nav.services": "Services",
   "nav.howItWorks": "How It Works",
   "nav.vehicles": "Vehicles",
+  "nav.about": "About Us",
   "nav.contact": "Contact",
   "nav.booking": "Book Now",
   
@@ -182,6 +186,8 @@ const enTranslations: Record<string, string> = {
   "form.datePlaceholder": "Select date",
   "form.time": "Time",
   "form.timePlaceholder": "Select time",
+  "form.vehicleSize": "Vehicle Size",
+  "form.vehicleSizePlaceholder": "Select vehicle size",
   "form.duration": "Duration",
   "form.durationPlaceholder": "Select duration",
   "form.submit": "Book Now",
