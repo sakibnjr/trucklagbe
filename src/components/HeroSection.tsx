@@ -252,6 +252,7 @@ const HeroSection = () => {
       setCustomerName("");
       setCustomerPhone("");
       setVehicleType("");
+      setVehicleSize("");
       setPickupLocation("");
       setDeliveryLocation("");
       setPickupDate(undefined);
