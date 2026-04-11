@@ -4,9 +4,9 @@ import { useState } from "react";
 
 const FloatingContactButtons = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const whatsappUrl = "https://wa.link/cz4ich";
-  const phoneNumber = "tel:+8801XXXXXXXXX";
-  const smsNumber = "sms:+8801XXXXXXXXX";
+  const whatsappUrl = "https://wa.me/8801608832209";
+  const phoneNumber = "tel:+8801978832209";
+  const smsNumber = "sms:+8801978832209";
 
   const buttons = [
     {
