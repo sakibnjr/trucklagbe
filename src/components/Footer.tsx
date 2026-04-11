@@ -55,7 +55,7 @@ const Footer = () => {
                 <Truck className="w-6 h-6 text-accent-foreground" />
               </div>
               <span className="text-xl font-bold text-primary-foreground">
-                ট্রাক<span className="text-secondary">লাগবে</span>
+                আমার<span className="text-secondary">ট্রাক</span>
               </span>
             </motion.a>
             <p className="text-primary-foreground/60 mb-6">
@@ -131,7 +131,7 @@ const Footer = () => {
                 whileHover={{ x: 5 }}
               >
                 <Mail className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
-                <span>info@trucklagbe.com</span>
+                <span>info@amartruck.com</span>
               </motion.li>
               <motion.li 
                 className="flex items-start gap-3"
@@ -154,7 +154,7 @@ const Footer = () => {
           viewport={{ once: true }}
         >
           <p className="text-primary-foreground/60 text-sm">
-            © {currentYear} {language === "bn" ? "ট্রাকলাগবে।" : "TruckLagbe."} {t("footer.rights")}
+            © {currentYear} {language === "bn" ? "আমারট্রাক।" : "AmarTruck."} {t("footer.rights")}
           </p>
           <div className="flex gap-6 text-sm">
             {[t("footer.privacy"), t("footer.terms")].map((link) => (

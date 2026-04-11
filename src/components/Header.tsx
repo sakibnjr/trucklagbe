@@ -38,7 +38,7 @@ const Header = () => {
               <Truck className="w-6 h-6 text-primary-foreground" />
             </div>
             <span className="text-xl md:text-2xl font-bold text-foreground">
-              ট্রাক<span className="text-secondary">লাগবে</span>
+              আমার<span className="text-secondary">ট্রাক</span>
             </span>
           </motion.a>
 
@@ -130,7 +130,7 @@ const Header = () => {
                     <Truck className="w-5 h-5 text-primary-foreground" />
                   </div>
                   <span className="text-lg font-bold text-foreground">
-                    ট্রাক<span className="text-secondary">লাগবে</span>
+                    আমার<span className="text-secondary">ট্রাক</span>
                   </span>
                 </a>
                 <motion.button
