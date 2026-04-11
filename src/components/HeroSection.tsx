@@ -466,29 +466,49 @@ const HeroSection = () => {
                 </div>
               </motion.div>
 
-              {/* Vehicle Type */}
+              {/* Vehicle Type & Size */}
               <motion.div 
-                className="space-y-1.5 md:space-y-2"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.9 }}
               >
-                <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
-                  <Truck className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
-                  {t("form.vehicleType")}
-                </label>
-                <Select value={vehicleType} onValueChange={(value: VehicleType) => setVehicleType(value)}>
-                  <SelectTrigger className="h-10 md:h-12 text-sm">
-                    <SelectValue placeholder={t("form.vehiclePlaceholder")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {vehicleTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <Truck className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
+                    {t("form.vehicleType")}
+                  </label>
+                  <Select value={vehicleType} onValueChange={(value: VehicleType) => setVehicleType(value)}>
+                    <SelectTrigger className="h-10 md:h-12 text-sm">
+                      <SelectValue placeholder={t("form.vehiclePlaceholder")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {vehicleTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1.5 md:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5 md:gap-2">
+                    <Ruler className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
+                    {t("form.vehicleSize")}
+                  </label>
+                  <Select value={vehicleSize} onValueChange={setVehicleSize}>
+                    <SelectTrigger className="h-10 md:h-12 text-sm">
+                      <SelectValue placeholder={t("form.vehicleSizePlaceholder")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {vehicleSizeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </motion.div>
 
               {/* Pickup & Delivery Locations */}
