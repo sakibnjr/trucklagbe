@@ -17,6 +17,7 @@ import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { cn, isValidBdMobile11, normalizeBdMobileDigits, formatPickupTimeDisplay } from "@/lib/utils";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -366,7 +367,7 @@ const HeroSection = () => {
         />
       </div>
 
-      <div className="container relative pt-32 pb-20 md:pt-40 md:pb-32">
+      <div className={cn(SITE_CONTENT_CLASS, "relative pt-32 pb-20 md:pt-40 md:pb-32")}>
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <motion.div 

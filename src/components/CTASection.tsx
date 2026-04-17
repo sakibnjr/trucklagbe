@@ -3,6 +3,8 @@ import { Phone, ArrowRight } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 import ctaBg from "@/assets/cta-bg.jpg";
 
 const CTASection = () => {
@@ -66,7 +68,7 @@ const CTASection = () => {
         transition={{ duration: 4, repeat: Infinity }}
       />
 
-      <div className="container relative text-center">
+      <div className={cn(SITE_CONTENT_CLASS, "relative text-center")}>
         <motion.h2 
           className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6"
           initial={{ opacity: 0, y: 30 }}

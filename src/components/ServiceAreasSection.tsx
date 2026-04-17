@@ -2,6 +2,8 @@ import { MapPin } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 import serviceAreasBg from "@/assets/service-areas-bg.jpg";
 
 const ServiceAreasSection = () => {
@@ -81,7 +83,7 @@ const ServiceAreasSection = () => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/95 to-background/80" />
 
-      <div className="container relative">
+      <div className={cn(SITE_CONTENT_CLASS, "relative")}>
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <motion.div

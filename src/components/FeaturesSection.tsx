@@ -2,6 +2,7 @@ import { Shield, Clock, Wallet, Headphones, MapPin, Users, LucideIcon } from "lu
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 
 interface Feature {
   icon: LucideIcon;
@@ -70,7 +71,7 @@ const FeaturesSection = () => {
 
   return (
     <section id="services" className="py-20 md:py-28 bg-muted/50" ref={ref}>
-      <div className="container">
+      <div className={SITE_CONTENT_CLASS}>
         {/* Section Header */}
         <motion.div 
           className="text-center max-w-2xl mx-auto mb-16"

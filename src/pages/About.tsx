@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 
 const About = () => {
   const { t, language } = useLanguage();
@@ -54,9 +55,10 @@ const About = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      
+
+      <div className={SITE_CONTENT_CLASS}>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 bg-gradient-to-br from-primary via-primary/95 to-primary/90">
+      <section className="relative mt-3 sm:mt-4 pt-28 sm:pt-32 pb-14 sm:pb-16 md:pb-20 rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-primary/90 shadow-lg shadow-primary/20 ring-1 ring-primary-foreground/10">
         <div className="absolute inset-0 opacity-10">
           <motion.div 
             className="absolute top-20 left-10 w-72 h-72 bg-secondary rounded-full blur-3xl"
@@ -65,7 +67,7 @@ const About = () => {
           />
         </div>
         
-        <div className="container relative">
+        <div className="w-full relative px-5 sm:px-8 md:px-10 lg:px-12 py-2">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -81,7 +83,7 @@ const About = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               {language === "bn" ? "আমাদের সম্পর্কে" : "About Us"}
             </h1>
-            <p className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-primary-foreground/80 max-w-none mx-auto">
               {language === "bn" 
                 ? "বাংলাদেশের সবচেয়ে বিশ্বস্ত ট্রান্সপোর্ট সার্ভিস - আমারট্রাক আপনার পরিবহন সমস্যার সমাধান।"
                 : "AmarTruck - Bangladesh's most trusted transport service, solving all your transportation needs."
@@ -93,7 +95,7 @@ const About = () => {
 
       {/* Our Story Section */}
       <section className="py-20 bg-background">
-        <div className="container">
+        <div className="w-full">
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -157,7 +159,7 @@ const About = () => {
 
       {/* Our Values Section */}
       <section className="py-20 bg-muted/50">
-        <div className="container">
+        <div className="w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -199,7 +201,7 @@ const About = () => {
 
       {/* Coverage Section */}
       <section className="py-20 bg-background">
-        <div className="container">
+        <div className="w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -218,7 +220,7 @@ const About = () => {
                 : "Our Service Across All 64 Districts of Bangladesh"
               }
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+            <p className="text-muted-foreground max-w-none mx-auto mb-8">
               {language === "bn"
                 ? "ঢাকা থেকে চট্টগ্রাম, সিলেট থেকে খুলনা - যেখানেই আপনি থাকুন, আমরা আছি আপনার পাশে।"
                 : "From Dhaka to Chittagong, Sylhet to Khulna - wherever you are, we are there for you."
@@ -232,6 +234,7 @@ const About = () => {
           </motion.div>
         </div>
       </section>
+      </div>
 
       <Footer />
       <WhatsAppButton />

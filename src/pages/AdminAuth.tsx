@@ -7,6 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { Lock, Mail, Truck, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 
 const AdminAuth = () => {
   const navigate = useNavigate();
@@ -84,12 +86,13 @@ const AdminAuth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
+      <div className={cn(SITE_CONTENT_CLASS, "flex justify-center")}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
         <div className="bg-card rounded-2xl shadow-elevated p-8">
           <div className="text-center mb-8">
             <motion.div 
@@ -154,7 +157,8 @@ const AdminAuth = () => {
             </Link>
           </div>
         </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };

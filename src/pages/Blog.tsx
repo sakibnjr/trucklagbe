@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight, Calendar, BookOpen, Tag } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import MarketingPageLayout from "@/components/MarketingPageLayout";
 import MarketingPageHero from "@/components/MarketingPageHero";
@@ -43,12 +44,16 @@ const Blog = () => {
       day: "numeric",
     });
 
-  const pageTitle =
-    language === "bn" ? "ব্লগ — AmarTruck" : "Blog — AmarTruck";
+  const pageTitle = language === "bn" ? "ব্লগ — AmarTruck" : "Blog — AmarTruck";
   const pageDesc =
     language === "bn"
       ? "পরিবহন, বাসা বদল ও লজিস্টিকস নিয়ে সংক্ষিপ্ত আপডেট ও টিপস।"
       : "Short updates and tips on transport, moving, and logistics.";
+
+  const heroSubtitle =
+    language === "bn"
+      ? "পরিবহন, বাসা বদল ও লজিস্টিকস—আমাদের টিমের ব্যবহারিক লেখা। নিয়মিত আপডেটের জন্য এই পাতাটি বুকমার্ক করুন।"
+      : "Practical articles on transport, moving, and logistics from our team. Bookmark this page for new updates.";
 
   return (
     <MarketingPageLayout>
@@ -59,11 +64,33 @@ const Blog = () => {
 
       <MarketingPageHero
         title={language === "bn" ? "ব্লগ ও সাম্প্রতিক পোস্ট" : "Blog & recent posts"}
-        subtitle={pageDesc}
+        subtitle={heroSubtitle}
       />
 
-      <section id="recent" className="py-16 md:py-20 bg-muted/40 scroll-mt-28">
-        <div className="container max-w-3xl">
+      <section className="py-8 bg-muted/30 border-b border-border">
+        <div className="w-full flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <BookOpen className="w-4 h-4 text-secondary" />
+            {language === "bn" ? "ডিসপ্যাচ ও অপারেশন টিম থেকে" : "From dispatch & operations"}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {(language === "bn" ? ["গাইড", "টিপস", "নিরাপত্তা"] : ["Guides", "Tips", "Safety"]).map(
+              (tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1 rounded-full bg-secondary/15 px-3 py-1 text-xs font-medium text-foreground"
+                >
+                  <Tag className="w-3 h-3 text-secondary" />
+                  {tag}
+                </span>
+              ),
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section id="recent" className="py-16 md:py-20 bg-background scroll-mt-28">
+        <div className="w-full">
           <h2 className="text-xl font-semibold text-foreground mb-8">
             {language === "bn" ? "সাম্প্রতিক পোস্ট" : "Recent posts"}
           </h2>
@@ -107,9 +134,7 @@ const Blog = () => {
                         {post.title}
                       </h3>
                       {post.excerpt && (
-                        <p className="text-muted-foreground text-sm leading-relaxed mb-3">
-                          {post.excerpt}
-                        </p>
+                        <p className="text-muted-foreground text-sm leading-relaxed mb-3">{post.excerpt}</p>
                       )}
                       <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
                         {language === "bn" ? "পড়ুন" : "Read more"}
@@ -121,6 +146,19 @@ const Blog = () => {
               ))}
             </ul>
           )}
+        </div>
+      </section>
+
+      <section className="py-14 bg-muted/40 border-t border-border">
+        <div className="w-full text-center">
+          <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+            {language === "bn"
+              ? "নির্দিষ্ট রুট বা ফ্লিট নিয়ে প্রশ্ন? আমাদের সাপোর্ট টিম সাহায্য করতে প্রস্তুত।"
+              : "Questions about a route or vehicle type? Our support team is ready to help."}
+          </p>
+          <Button variant="secondary" asChild>
+            <Link to="/contact">{language === "bn" ? "যোগাযোগ করুন" : "Contact us"}</Link>
+          </Button>
         </div>
       </section>
     </MarketingPageLayout>

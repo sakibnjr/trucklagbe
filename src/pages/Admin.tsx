@@ -40,6 +40,8 @@ import { Link } from "react-router-dom";
 import AdminManagement from "@/components/AdminManagement";
 import BlogManagement from "@/components/BlogManagement";
 import type { Database } from "@/integrations/supabase/types";
+import { cn } from "@/lib/utils";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 
 type Booking = Database["public"]["Tables"]["bookings"]["Row"];
 type BookingStatus = Database["public"]["Enums"]["booking_status"];
@@ -200,7 +202,7 @@ const Admin = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-card border-b sticky top-0 z-50">
-        <div className="container py-3 md:py-4">
+        <div className={cn(SITE_CONTENT_CLASS, "py-3 md:py-4")}>
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
               <div className="bg-primary p-1.5 md:p-2 rounded-lg">
@@ -243,7 +245,7 @@ const Admin = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container py-4 md:py-8 px-3 md:px-4">
+      <main className={cn(SITE_CONTENT_CLASS, "py-4 md:py-8 px-3 md:px-4")}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

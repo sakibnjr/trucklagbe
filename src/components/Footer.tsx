@@ -2,6 +2,8 @@ import { Truck, Phone, Mail, MapPin, Facebook, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -40,7 +42,7 @@ const Footer = () => {
   return (
     <footer id="contact" className="bg-foreground text-primary-foreground/80">
       <motion.div 
-        className="container py-16"
+        className={cn(SITE_CONTENT_CLASS, "py-16")}
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -152,7 +154,7 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="border-t border-primary-foreground/10">
         <motion.div 
-          className="container py-6 flex flex-col md:flex-row justify-between items-center gap-4"
+          className={cn(SITE_CONTENT_CLASS, "py-6 flex flex-col md:flex-row justify-between items-center gap-4")}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

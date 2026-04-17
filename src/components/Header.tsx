@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,7 +60,7 @@ const Header = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-md border-b border-border"
       >
-        <div className="container flex items-center justify-between h-16 md:h-20 gap-2">
+        <div className={cn(SITE_CONTENT_CLASS, "flex items-center justify-between h-16 md:h-20 gap-2")}>
           <Link
             to="/"
             className="flex items-center gap-2 shrink-0"

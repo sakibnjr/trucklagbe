@@ -4,6 +4,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useBooking } from "@/contexts/BookingContext";
+import { SITE_CONTENT_CLASS } from "@/lib/layout";
 
 // Import vehicle images
 import truckImage from "@/assets/vehicles/truck.jpg";
@@ -110,7 +111,7 @@ const VehiclesSection = () => {
 
   return (
     <section id="vehicles" className="py-20 md:py-28 bg-muted/50" ref={ref}>
-      <div className="container">
+      <div className={SITE_CONTENT_CLASS}>
         {/* Section Header */}
         <motion.div 
           className="text-center max-w-2xl mx-auto mb-16"
