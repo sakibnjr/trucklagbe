@@ -245,7 +245,7 @@ const Admin = () => {
       </header>
 
       {/* Main Content */}
-      <main className={cn(SITE_CONTENT_CLASS, "py-4 md:py-8 px-3 md:px-4")}>
+      <main className={cn(SITE_CONTENT_CLASS, "py-4 md:py-8")}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
