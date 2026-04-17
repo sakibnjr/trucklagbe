@@ -1,54 +1,46 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import MarketingPageLayout from "@/components/MarketingPageLayout";
 import MarketingPageHero from "@/components/MarketingPageHero";
+import { supabase } from "@/integrations/supabase/client";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string | null;
+  content: string;
+  cover_image_url: string | null;
+  created_at: string;
+}
 
 const Blog = () => {
   const { language } = useLanguage();
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const posts =
-    language === "bn"
-      ? [
-          {
-            title: "৭ ফুট থেকে ২৩ ফুট—কোন ট্রাক আপনার জন্য?",
-            excerpt:
-              "মালের ওজন ও আকার অনুযায়ী গাড়ি বাছাই করলে খরচ কমে ও সময় বাঁচে। আমাদের গাইডলাইন।",
-            date: "২০২৬, ১৫ মার্চ",
-          },
-          {
-            title: "ঢাকায় বাসা বদল: এক দিনে সেরা সময়",
-            excerpt:
-              "ট্রাফিক ও লোডিং এড়াতে কখন বের হবেন—অভিজ্ঞ ড্রাইভারদের পরামর্শ।",
-            date: "২০২৬, ২ মার্চ",
-          },
-          {
-            title: "মাল বীমা ও নিরাপত্তা: যা জানা দরকার",
-            excerpt:
-              "বাণিজ্যিক শিপমেন্টে কীভাবে ঝুঁকি কমানো যায়—মৌলিক চেকলিস্ট।",
-            date: "২০২৬, ১৮ ফেব্রুয়ারি",
-          },
-        ]
-      : [
-          {
-            title: "7 ft to 23 ft—which truck fits your load?",
-            excerpt:
-              "Choosing by weight and size saves money and time. A quick guide from our team.",
-            date: "Mar 15, 2026",
-          },
-          {
-            title: "House shifting in Dhaka: best time of day",
-            excerpt:
-              "When to start to avoid peak traffic and loading delays—tips from our drivers.",
-            date: "Mar 2, 2026",
-          },
-          {
-            title: "Cargo safety basics for businesses",
-            excerpt:
-              "Simple checks that reduce risk on commercial shipments.",
-            date: "Feb 18, 2026",
-          },
-        ];
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase
+        .from("blogs")
+        .select("id,title,excerpt,content,cover_image_url,created_at")
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+      setPosts((data as BlogPost[]) || []);
+      setIsLoading(false);
+    };
+    load();
+  }, []);
+
+  const formatDate = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString(language === "bn" ? "bn-BD" : "en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   return (
     <MarketingPageLayout>
@@ -66,25 +58,53 @@ const Blog = () => {
           <h2 className="text-xl font-semibold text-foreground mb-8">
             {language === "bn" ? "সাম্প্রতিক পোস্ট" : "Recent posts"}
           </h2>
-          <ul className="space-y-6">
-            {posts.map((post, i) => (
-              <motion.li
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
-                className="bg-card border border-border rounded-xl p-6 shadow-soft"
-              >
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                  <Calendar className="w-4 h-4" />
-                  {post.date}
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{post.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{post.excerpt}</p>
-              </motion.li>
-            ))}
-          </ul>
+
+          {isLoading ? (
+            <div className="text-center py-12 text-muted-foreground">
+              {language === "bn" ? "লোড হচ্ছে..." : "Loading..."}
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              {language === "bn" ? "এখনো কোনো পোস্ট নেই।" : "No posts yet."}
+            </div>
+          ) : (
+            <ul className="space-y-6">
+              {posts.map((post, i) => (
+                <motion.li
+                  key={post.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06 }}
+                  className="bg-card border border-border rounded-xl overflow-hidden shadow-soft"
+                >
+                  {post.cover_image_url && (
+                    <img
+                      src={post.cover_image_url}
+                      alt={post.title}
+                      className="w-full h-48 object-cover"
+                      loading="lazy"
+                    />
+                  )}
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                      <Calendar className="w-4 h-4" />
+                      {formatDate(post.created_at)}
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{post.title}</h3>
+                    {post.excerpt && (
+                      <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                        {post.excerpt}
+                      </p>
+                    )}
+                    <p className="text-foreground text-sm leading-relaxed whitespace-pre-line">
+                      {post.content}
+                    </p>
+                  </div>
+                </motion.li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
     </MarketingPageLayout>
