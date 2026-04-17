@@ -105,7 +105,7 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56 z-[80]">
                 {serviceDropdown.map((item, idx) =>
-                  item.type === "sep" ? (
+                  "type" in item ? (
                     <DropdownMenuSeparator key={`sep-${idx}`} />
                   ) : (
                     <DropdownMenuItem key={item.labelKey} asChild>
@@ -227,7 +227,7 @@ const Header = () => {
                       className="overflow-hidden bg-muted/40"
                     >
                       {serviceDropdown.map((item, idx) =>
-                        item.type === "sep" ? (
+                        "type" in item ? (
                           <div key={`msep-${idx}`} className="h-px bg-border/60 mx-4 my-1" />
                         ) : (
                           <Link

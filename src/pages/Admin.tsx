@@ -33,10 +33,12 @@ import {
   Phone,
   Clock,
   Settings,
+  FileText,
 } from "lucide-react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import AdminManagement from "@/components/AdminManagement";
+import BlogManagement from "@/components/BlogManagement";
 import type { Database } from "@/integrations/supabase/types";
 
 type Booking = Database["public"]["Tables"]["bookings"]["Row"];
@@ -68,7 +70,7 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'bookings' | 'admins'>('bookings');
+  const [activeTab, setActiveTab] = useState<'bookings' | 'admins' | 'blogs'>('bookings');
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -211,15 +213,24 @@ const Admin = () => {
               <span className="text-xs md:text-sm text-muted-foreground hidden sm:block truncate max-w-[120px] md:max-w-none">
                 {user?.email}
               </span>
+              <Button
+                variant={activeTab === 'blogs' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveTab(activeTab === 'blogs' ? 'bookings' : 'blogs')}
+                className="text-xs md:text-sm px-2 md:px-3"
+              >
+                <FileText className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">{activeTab === 'blogs' ? 'বুকিং' : 'ব্লগ'}</span>
+              </Button>
               {isAdmin && (
                 <Button
                   variant={activeTab === 'admins' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setActiveTab(activeTab === 'bookings' ? 'admins' : 'bookings')}
+                  onClick={() => setActiveTab(activeTab === 'admins' ? 'bookings' : 'admins')}
                   className="text-xs md:text-sm px-2 md:px-3"
                 >
                   <Settings className="w-4 h-4 md:mr-2" />
-                  <span className="hidden md:inline">{activeTab === 'bookings' ? 'অ্যাডমিন' : 'বুকিং'}</span>
+                  <span className="hidden md:inline">{activeTab === 'admins' ? 'বুকিং' : 'অ্যাডমিন'}</span>
                 </Button>
               )}
               <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs md:text-sm px-2 md:px-3">
@@ -240,6 +251,8 @@ const Admin = () => {
         >
           {activeTab === 'admins' && isAdmin ? (
             <AdminManagement />
+          ) : activeTab === 'blogs' ? (
+            <BlogManagement />
           ) : (
             <>
               {/* Stats Cards */}
