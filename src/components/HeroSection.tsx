@@ -261,7 +261,7 @@ const HeroSection = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from('bookings').insert({
+      const { error } = await supabase.from('bookings').insert([{
         customer_name: customerName.trim(),
         customer_phone: normalizeBdMobileDigits(customerPhone),
         vehicle_type: vehicleType,
@@ -270,7 +270,7 @@ const HeroSection = () => {
         pickup_date: pickupDate.toISOString().split('T')[0],
         pickup_time: `${pickupTime}:00`,
         duration_days: parseInt(duration),
-      });
+      }]);
 
       if (error) throw error;
 
