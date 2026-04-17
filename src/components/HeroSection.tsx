@@ -264,7 +264,7 @@ const HeroSection = () => {
       const { error } = await supabase.from('bookings').insert([{
         customer_name: customerName.trim(),
         customer_phone: normalizeBdMobileDigits(customerPhone),
-        vehicle_type: vehicleType,
+        vehicle_type: vehicleType as Exclude<typeof vehicleType, "">,
         pickup_location: pickupLocation.trim(),
         delivery_location: deliveryLocation.trim(),
         pickup_date: pickupDate.toISOString().split('T')[0],
