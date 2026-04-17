@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
-import { Calendar } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import MarketingPageLayout from "@/components/MarketingPageLayout";
 import MarketingPageHero from "@/components/MarketingPageHero";
@@ -8,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface BlogPost {
   id: string;
+  slug: string;
   title: string;
   excerpt: string | null;
   content: string;
@@ -24,7 +27,7 @@ const Blog = () => {
     const load = async () => {
       const { data } = await supabase
         .from("blogs")
-        .select("id,title,excerpt,content,cover_image_url,created_at")
+        .select("id,slug,title,excerpt,content,cover_image_url,created_at")
         .eq("published", true)
         .order("created_at", { ascending: false });
       setPosts((data as BlogPost[]) || []);
@@ -33,24 +36,30 @@ const Blog = () => {
     load();
   }, []);
 
-  const formatDate = (iso: string) => {
-    const d = new Date(iso);
-    return d.toLocaleDateString(language === "bn" ? "bn-BD" : "en-US", {
+  const formatDate = (iso: string) =>
+    new Date(iso).toLocaleDateString(language === "bn" ? "bn-BD" : "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
-  };
+
+  const pageTitle =
+    language === "bn" ? "ব্লগ — AmarTruck" : "Blog — AmarTruck";
+  const pageDesc =
+    language === "bn"
+      ? "পরিবহন, বাসা বদল ও লজিস্টিকস নিয়ে সংক্ষিপ্ত আপডেট ও টিপস।"
+      : "Short updates and tips on transport, moving, and logistics.";
 
   return (
     <MarketingPageLayout>
+      <Helmet>
+        <title>{pageTitle.slice(0, 60)}</title>
+        <meta name="description" content={pageDesc.slice(0, 160)} />
+      </Helmet>
+
       <MarketingPageHero
         title={language === "bn" ? "ব্লগ ও সাম্প্রতিক পোস্ট" : "Blog & recent posts"}
-        subtitle={
-          language === "bn"
-            ? "পরিবহন, বাসা বদল ও লজিস্টিকস নিয়ে সংক্ষিপ্ত আপডেট ও টিপস।"
-            : "Short updates and tips on transport, moving, and logistics."
-        }
+        subtitle={pageDesc}
       />
 
       <section id="recent" className="py-16 md:py-20 bg-muted/40 scroll-mt-28">
@@ -76,31 +85,38 @@ const Blog = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.06 }}
-                  className="bg-card border border-border rounded-xl overflow-hidden shadow-soft"
                 >
-                  {post.cover_image_url && (
-                    <img
-                      src={post.cover_image_url}
-                      alt={post.title}
-                      className="w-full h-48 object-cover"
-                      loading="lazy"
-                    />
-                  )}
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                      <Calendar className="w-4 h-4" />
-                      {formatDate(post.created_at)}
-                    </div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">{post.title}</h3>
-                    {post.excerpt && (
-                      <p className="text-muted-foreground text-sm leading-relaxed mb-3">
-                        {post.excerpt}
-                      </p>
+                  <Link
+                    to={`/blog/${post.slug}`}
+                    className="group block bg-card border border-border rounded-xl overflow-hidden shadow-soft hover:shadow-md transition-shadow"
+                  >
+                    {post.cover_image_url && (
+                      <img
+                        src={post.cover_image_url}
+                        alt={post.title}
+                        className="w-full h-48 object-cover"
+                        loading="lazy"
+                      />
                     )}
-                    <p className="text-foreground text-sm leading-relaxed whitespace-pre-line">
-                      {post.content}
-                    </p>
-                  </div>
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                        <Calendar className="w-4 h-4" />
+                        {formatDate(post.created_at)}
+                      </div>
+                      <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                        {post.title}
+                      </h3>
+                      {post.excerpt && (
+                        <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                          {post.excerpt}
+                        </p>
+                      )}
+                      <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
+                        {language === "bn" ? "পড়ুন" : "Read more"}
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </div>
+                  </Link>
                 </motion.li>
               ))}
             </ul>

@@ -113,7 +113,7 @@ const BlogManagement = () => {
 
     const { error } = editing
       ? await supabase.from("blogs").update(payload).eq("id", editing.id)
-      : await supabase.from("blogs").insert([payload]);
+      : await supabase.from("blogs").insert([{ ...payload, slug: "" }]);
 
     setIsSaving(false);
 
