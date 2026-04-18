@@ -237,6 +237,15 @@ const Admin = () => {
                   <span className="hidden md:inline">{activeTab === 'admins' ? 'বুকিং' : 'অ্যাডমিন'}</span>
                 </Button>
               )}
+              <Button
+                variant={activeTab === 'password' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveTab(activeTab === 'password' ? 'bookings' : 'password')}
+                className="text-xs md:text-sm px-2 md:px-3"
+              >
+                <KeyRound className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">{activeTab === 'password' ? 'বুকিং' : 'পাসওয়ার্ড'}</span>
+              </Button>
               <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs md:text-sm px-2 md:px-3">
                 <LogOut className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">লগআউট</span>
