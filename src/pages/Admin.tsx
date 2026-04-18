@@ -266,6 +266,8 @@ const Admin = () => {
             <AdminManagement />
           ) : activeTab === 'blogs' ? (
             <BlogManagement />
+          ) : activeTab === 'password' ? (
+            <PasswordChange />
           ) : (
             <>
               {/* Stats Cards */}
