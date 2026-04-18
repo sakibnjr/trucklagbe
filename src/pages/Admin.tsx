@@ -74,7 +74,7 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'bookings' | 'admins' | 'blogs'>('bookings');
+  const [activeTab, setActiveTab] = useState<'bookings' | 'admins' | 'blogs' | 'password'>('bookings');
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
