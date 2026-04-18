@@ -34,11 +34,13 @@ import {
   Clock,
   Settings,
   FileText,
+  KeyRound,
 } from "lucide-react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import AdminManagement from "@/components/AdminManagement";
 import BlogManagement from "@/components/BlogManagement";
+import PasswordChange from "@/components/PasswordChange";
 import type { Database } from "@/integrations/supabase/types";
 import { cn } from "@/lib/utils";
 import { SITE_CONTENT_CLASS } from "@/lib/layout";
