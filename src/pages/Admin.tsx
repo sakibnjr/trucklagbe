@@ -34,11 +34,13 @@ import {
   Clock,
   Settings,
   FileText,
+  KeyRound,
 } from "lucide-react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import AdminManagement from "@/components/AdminManagement";
 import BlogManagement from "@/components/BlogManagement";
+import PasswordChange from "@/components/PasswordChange";
 import type { Database } from "@/integrations/supabase/types";
 import { cn } from "@/lib/utils";
 import { SITE_CONTENT_CLASS } from "@/lib/layout";
@@ -72,7 +74,7 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'bookings' | 'admins' | 'blogs'>('bookings');
+  const [activeTab, setActiveTab] = useState<'bookings' | 'admins' | 'blogs' | 'password'>('bookings');
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -235,6 +237,15 @@ const Admin = () => {
                   <span className="hidden md:inline">{activeTab === 'admins' ? 'বুকিং' : 'অ্যাডমিন'}</span>
                 </Button>
               )}
+              <Button
+                variant={activeTab === 'password' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveTab(activeTab === 'password' ? 'bookings' : 'password')}
+                className="text-xs md:text-sm px-2 md:px-3"
+              >
+                <KeyRound className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">{activeTab === 'password' ? 'বুকিং' : 'পাসওয়ার্ড'}</span>
+              </Button>
               <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs md:text-sm px-2 md:px-3">
                 <LogOut className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">লগআউট</span>
@@ -255,6 +266,8 @@ const Admin = () => {
             <AdminManagement />
           ) : activeTab === 'blogs' ? (
             <BlogManagement />
+          ) : activeTab === 'password' ? (
+            <PasswordChange />
           ) : (
             <>
               {/* Stats Cards */}
