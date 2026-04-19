@@ -28,8 +28,38 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import { FileText, Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
+import { FileText, Plus, Pencil, Trash2, Eye, EyeOff, Upload, X, Loader2 } from "lucide-react";
 import { format } from "date-fns";
+
+// Compress image to WebP at 90% quality, max 1600px wide
+const compressToWebP = (file: File): Promise<Blob> =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const maxW = 1600;
+      const scale = Math.min(1, maxW / img.width);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("Canvas not supported"));
+      ctx.drawImage(img, 0, 0, w, h);
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error("Compression failed"))),
+        "image/webp",
+        0.9
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Invalid image"));
+    };
+    img.src = url;
+  });
 
 interface Blog {
   id: string;
@@ -76,6 +106,35 @@ const BlogManagement = () => {
       setBlogs((data as Blog[]) || []);
     }
     setIsLoading(false);
+  };
+
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "ত্রুটি", description: "শুধুমাত্র ইমেজ ফাইল আপলোড করুন", variant: "destructive" });
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const webp = await compressToWebP(file);
+      const path = `${crypto.randomUUID()}.webp`;
+      const { error: upErr } = await supabase.storage
+        .from("blog-images")
+        .upload(path, webp, { contentType: "image/webp", upsert: false });
+      if (upErr) throw upErr;
+      const { data } = supabase.storage.from("blog-images").getPublicUrl(path);
+      setForm((f) => ({ ...f, cover_image_url: data.publicUrl }));
+      toast({ title: "সফল", description: "ইমেজ আপলোড হয়েছে" });
+    } catch (err: any) {
+      toast({ title: "ত্রুটি", description: err.message || "আপলোড ব্যর্থ", variant: "destructive" });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const openNew = () => {
@@ -206,12 +265,47 @@ const BlogManagement = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label>কভার ইমেজ URL</Label>
-                <Input
-                  value={form.cover_image_url}
-                  onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })}
-                  placeholder="https://..."
-                />
+                <Label>কভার ইমেজ</Label>
+                {form.cover_image_url ? (
+                  <div className="relative rounded-lg border overflow-hidden">
+                    <img
+                      src={form.cover_image_url}
+                      alt="Cover preview"
+                      className="w-full h-48 object-cover"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8"
+                      onClick={() => setForm({ ...form, cover_image_url: "" })}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                      disabled={isUploading}
+                    />
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="w-6 h-6 text-muted-foreground animate-spin mb-2" />
+                        <p className="text-sm text-muted-foreground">আপলোড ও কম্প্রেস হচ্ছে...</p>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-6 h-6 text-muted-foreground mb-2" />
+                        <p className="text-sm text-muted-foreground">ক্লিক করে ইমেজ নির্বাচন করুন</p>
+                        <p className="text-xs text-muted-foreground mt-1">WebP তে কম্প্রেস হবে (90%)</p>
+                      </>
+                    )}
+                  </label>
+                )}
               </div>
               <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
