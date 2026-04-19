@@ -108,7 +108,35 @@ const BlogManagement = () => {
     setIsLoading(false);
   };
 
-  const openNew = () => {
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "ত্রুটি", description: "শুধুমাত্র ইমেজ ফাইল আপলোড করুন", variant: "destructive" });
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const webp = await compressToWebP(file);
+      const path = `${crypto.randomUUID()}.webp`;
+      const { error: upErr } = await supabase.storage
+        .from("blog-images")
+        .upload(path, webp, { contentType: "image/webp", upsert: false });
+      if (upErr) throw upErr;
+      const { data } = supabase.storage.from("blog-images").getPublicUrl(path);
+      setForm((f) => ({ ...f, cover_image_url: data.publicUrl }));
+      toast({ title: "সফল", description: "ইমেজ আপলোড হয়েছে" });
+    } catch (err: any) {
+      toast({ title: "ত্রুটি", description: err.message || "আপলোড ব্যর্থ", variant: "destructive" });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
     setEditing(null);
     setForm(empty);
     setIsOpen(true);
