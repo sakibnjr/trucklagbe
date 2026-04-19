@@ -265,12 +265,47 @@ const BlogManagement = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label>কভার ইমেজ URL</Label>
-                <Input
-                  value={form.cover_image_url}
-                  onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })}
-                  placeholder="https://..."
-                />
+                <Label>কভার ইমেজ</Label>
+                {form.cover_image_url ? (
+                  <div className="relative rounded-lg border overflow-hidden">
+                    <img
+                      src={form.cover_image_url}
+                      alt="Cover preview"
+                      className="w-full h-48 object-cover"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8"
+                      onClick={() => setForm({ ...form, cover_image_url: "" })}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                      disabled={isUploading}
+                    />
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="w-6 h-6 text-muted-foreground animate-spin mb-2" />
+                        <p className="text-sm text-muted-foreground">আপলোড ও কম্প্রেস হচ্ছে...</p>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-6 h-6 text-muted-foreground mb-2" />
+                        <p className="text-sm text-muted-foreground">ক্লিক করে ইমেজ নির্বাচন করুন</p>
+                        <p className="text-xs text-muted-foreground mt-1">WebP তে কম্প্রেস হবে (90%)</p>
+                      </>
+                    )}
+                  </label>
+                )}
               </div>
               <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
