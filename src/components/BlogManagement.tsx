@@ -137,6 +137,7 @@ const BlogManagement = () => {
     }
   };
 
+  const openNew = () => {
     setEditing(null);
     setForm(empty);
     setIsOpen(true);
